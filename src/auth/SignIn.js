@@ -83,14 +83,10 @@ class SignIn extends Component {
             return {
                 controls: {
                     ...prevState.controls,
-
                     [key]: {
                         ...prevState.controls[key],
                         value: value,
-                        valid: validate(
-                            value,
-                            prevState.controls[key].validationRules
-                        ),
+                        valid: validate( value, prevState.controls[key].validationRules ),
                         touched: true
                     }
                 }
@@ -101,67 +97,66 @@ class SignIn extends Component {
 
 
     render() {
-
         return (
-                    this.props.isLoading ?
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <ActivityIndicator animating={true} size="small" color="#000" />
+            this.props.isLoading ?
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator animating={true} size="small" color="#000" />
+            </View>
+            :
+            <KeyboardAvoidingView style={styles.container} behavior="position" keyboardVerticalOffset={-140}>
+                <View style={styles.logo}>
+                    <Image
+                        source={require('../../assets/images/nheed.png')}
+                        resizeMode='center'
+                        style={{ width: 100 }}
+                    />
+                </View>
+                <View style={styles.contact}>
+                    <Image source={require('../../assets/images/user.png')}
+                        style={{ height: 120, width: 120, margin: 'auto', position: 'absolute', borderRadius: 90, zIndex: 123445 }} />
+                </View>
+                <View style={styles.skewShape} />
+                <View style={styles.innerShape} />
+                <View style={styles.textCard}>
+                    <TouchableOpacity onPress={this.authHandler} style={styles.button}>
+                        <Text style={styles.btnText}>
+                            SIGN IN
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <View style={styles.shape}>
+                        <DefaultInput
+                            placeholder='Enter your email'
+                            autoCorrect={false}
+                            autoFocus={false}
+                            returnKeyType='next'
+                            keyboardType='email-address'
+                            style={styles.textInput}
+                            value={this.state.controls.email.value}
+                            onChangeText={val => this.updateInputState("email", val)}
+                            valid={this.state.controls.email.valid}
+                            touched={this.state.controls.email.touched}
+                        />
+                        <DefaultInput
+                            placeholder='Enter your password'
+                            autoCorrect={false}
+                            autoFocus={false}
+                            keyboardType='default'
+                            secureTextEntry={true}
+                            style={styles.textInput}
+                            borderBottomColor='black'
+                            value={this.state.controls.password.value}
+                            onChangeText={val => this.updateInputState("password", val)}
+                            valid={this.state.controls.password.valid}
+                            touched={this.state.controls.password.touched}
+                        />
                     </View>
-                    :
-                    <KeyboardAvoidingView style={styles.container} behavior="position" keyboardVerticalOffset={-140}>
-                        <View style={styles.logo}>
-                            <Image
-                                source={require('../../assets/images/nheed.png')}
-                                resizeMode='center'
-                                style={{ width: 100 }}
-                            />
-                        </View>
-                        <View style={styles.contact}>
-                            <Image source={require('../../assets/images/user.png')}
-                                style={{ height: 120, width: 120, margin: 'auto', position: 'absolute', borderRadius: 90, zIndex: 123445 }} />
-                        </View>
-                        <View style={styles.skewShape} />
-                        <View style={styles.innerShape} />
-                        <View style={styles.textCard}>
-                            <TouchableOpacity onPress={this.authHandler} style={styles.button}>
-                                <Text style={styles.btnText}>
-                                    SIGN IN
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                            <View style={styles.shape}>
-                                <DefaultInput
-                                    placeholder='Enter your email'
-                                    autoCorrect={false}
-                                    autoFocus={false}
-                                    returnKeyType='next'
-                                    keyboardType='email-address'
-                                    style={styles.textInput}
-                                    value={this.state.controls.email.value}
-                                    onChangeText={val => this.updateInputState("email", val)}
-                                    valid={this.state.controls.email.valid}
-                                    touched={this.state.controls.email.touched}
-                                />
-                                <DefaultInput
-                                    placeholder='Enter your password'
-                                    autoCorrect={false}
-                                    autoFocus={false}
-                                    keyboardType='default'
-                                    secureTextEntry={true}
-                                    style={styles.textInput}
-                                    borderBottomColor='black'
-                                    value={this.state.controls.password.value}
-                                    onChangeText={val => this.updateInputState("password", val)}
-                                    valid={this.state.controls.password.valid}
-                                    touched={this.state.controls.password.touched}
-                                />
-                            </View>
-                        </TouchableWithoutFeedback>
+                </TouchableWithoutFeedback>
 
-                        <Text style={styles.signUp} onPress={this.signUp}> SIGN UP</Text>
+                <Text style={styles.signUp} onPress={this.signUp}> SIGN UP</Text>
 
-                    </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
 
         );
     }

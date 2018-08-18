@@ -1,8 +1,8 @@
 import {login, register} from '../Actions/actionType'
 
 const initialState= {
-    items: [],
-    error: false,
+    token: null,
+    userId: null,
 }
 
 export default function(state=initialState, action){
@@ -10,7 +10,8 @@ export default function(state=initialState, action){
         case login:
             return {
                 ...state,
-                items: action.payload,
+                token: action.token,
+                userId: action.userId
             };
         // case register:
         //     return{
