@@ -6,7 +6,7 @@ import { NavigationActions } from 'react-navigation'
 // import setAsync from '../../component/Utility/setAsync';
 
 
-export const login = (userDetails) => (dispatch, getState) => {
+export const loginUser = (userDetails) => (dispatch, getState) => {
     const {isConnected} = getState();
     const signinURL = REQUEST_URL + LOGIN_URL;
 
@@ -64,8 +64,7 @@ export const login = (userDetails) => (dispatch, getState) => {
                             resData.data.id.toString()
                         )
                     );
-                    dispatch(NavigationActions.navigate({ routeName: 'SignUp' }))
-                    console.log('succes')
+                    dispatch(NavigationActions.navigate({ routeName: 'Home' }))
                 }
             });
         
@@ -88,9 +87,38 @@ export const authSetTokenUserId= (token, userId)=>{
     };
 }
 
-export const authGetToken = () => (dispatch, getState)=> {
-    const Promise = new Promise ((resolve, reject) => {
-        const token = getState().auth.token;
-        const userId = getState().aut.token 
-    })
-}
+// export const authGetToken = () => (dispatch, getState)=> {
+//     const Promise = new Promise ((resolve, reject) => {
+//         const token = getState().auth.token;
+//         const userId = getState().aut.token 
+//         if(!token){
+//             AsyncStorage.getItem('token')
+//             .catch(err=>reject())
+//             .then(token => {
+//                 if (!token) {
+//                   throw new Error();
+//                 } else {
+//                   return token;
+//                 }
+//               });
+//             // resolve(token)
+//         }
+//     })
+// }
+
+// export const authAutoSignIn = () => dispatch=>{
+//     const token = getState().auth.token;
+//     if(!token){
+//         AsyncStorage.getItem('token')
+//         .catch(err=>reject())
+//         .then(token => {
+//             if (!token) {
+//               throw new Error();
+//             } else {
+//                 dispatch(NavigationActions.navigate({ routeName: 'SignUp' }))
+//                 return token;
+//             }
+//           });
+//         // resolve(token)
+//     }
+// }

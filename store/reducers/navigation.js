@@ -18,6 +18,12 @@ export default navigationReducer = (state = initialState, action) => {
                 state
             );
             break;
+        case 'Home':
+        nextState = router.getStateForAction(
+            NavigationActions.navigate({ routeName: 'Home' }),
+            state
+        );
+        break;
         default:
             nextState = AppNavigator.router.getStateForAction(action, state);
     }

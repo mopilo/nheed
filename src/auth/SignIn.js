@@ -10,15 +10,14 @@ import {
     Keyboard,
     ToastAndroid,
     NetInfo,
-    ActivityIndicator
+    ActivityIndicator,
+    AsyncStorage
 } from 'react-native';
 import {connect} from 'react-redux'
 import DefaultInput from '../../component/UI/DefaultInput';
 import validate from '../../component/Utility/validation';
-import { REQUEST_URL, LOGIN_URL } from '../../component/Utility/local';
-import setAsync from '../../component/Utility/setAsync';
-import { login} from '../../store/Actions/index'
 import {isConnected} from  '../../store/Actions/isConnected'
+import { loginUser, authAutoSignIn} from '../../store/Actions/index'
 
 
 class SignIn extends Component {
@@ -53,6 +52,12 @@ class SignIn extends Component {
 
     componentDidMount() {
         NetInfo.isConnected.addEventListener('connectionChange', this._handleConnectionChange);
+        AsyncStorage.getItem('token').then((token)=>{
+            if(token != null){
+                this.props.navigation.navigate('Home')
+                console.log("mounting", token)
+            }
+        })
     }
     
     componentWillUnmount() {
@@ -65,7 +70,10 @@ class SignIn extends Component {
     };
     
 
-    
+    signUp = () => {
+        this.props.navigation.navigate('SignUp')
+        // dispatch(NavigationActions.navigate({ routeName: 'SignUp' }))
+    }
 
 
     authHandler = () => {
@@ -274,8 +282,8 @@ const mapStateToProps = state => {
   
   const mapDispatchToProps = dispatch => {
     return {
-      onTryAuth: (authData) => dispatch(login(authData)),
-    //   onAutoSignIn: () => dispatch(authAutoSignIn())
+        onTryAuth: (authData) => dispatch(loginUser(authData)),
+        onAutoSignIn: () => dispatch(authAutoSignIn()),
         network: (status) => dispatch(isConnected(status))
     };
   };

@@ -9,13 +9,15 @@ import { connect } from 'react-redux'
 import SignIn from '../../src/auth/SignIn'
 import SignUp from '../../src/auth/SignUp'
 import OTP from '../../src/auth/OTP'
+import Home from '../../src/tabs/Home'
 
 export const AppNavigator = createStackNavigator({
     SignIn:{
-        screen: SignIn
-        },  
-        SignUp: {screen:SignUp},
-        OTP: {screen:OTP},
+      screen: SignIn
+    },  
+    SignUp: {screen:SignUp},
+    OTP: {screen:OTP},
+    Home: {screen: Home}
     },{
 });
 
