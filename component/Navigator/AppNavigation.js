@@ -18,8 +18,8 @@ export const AppNavigator = createStackNavigator({
     SignUp: {screen:SignUp},
     OTP: {screen:OTP},
     Home: {screen: Home}
-    },{
-});
+    },
+  );
 
 // Note: createReactNavigationReduxMiddleware must be run before createReduxBoundAddListener
 export const navigationMiddleware = createReactNavigationReduxMiddleware("root", state => state.nav)
