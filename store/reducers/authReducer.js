@@ -1,8 +1,9 @@
-import {login, register} from '../Actions/actionType'
+import {login, register, otp} from '../Actions/actionType'
 
 const initialState= {
     token: null,
     userId: null,
+    email: null
 }
 
 export default function(state=initialState, action){
@@ -13,10 +14,17 @@ export default function(state=initialState, action){
                 token: action.token,
                 userId: action.userId
             };
-        // case register:
-        //     return{
-
-        //     };
+        case register:
+            return{
+                ...state,
+                email: action.email
+            };
+        case otp:
+        return{
+            ...state,
+            email: action.token,
+            userId: action.userId
+        };
         default:
             return state
     }
