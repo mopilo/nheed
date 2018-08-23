@@ -10,6 +10,7 @@ import SignIn from '../../src/auth/SignIn'
 import SignUp from '../../src/auth/SignUp'
 import OTP from '../../src/auth/OTP'
 import Home from '../../src/tabs/Home'
+import EditProfile from '../../src/profile/EditProfile'
 
 export const AppNavigator = createStackNavigator({
     SignIn:{
@@ -17,7 +18,8 @@ export const AppNavigator = createStackNavigator({
     },  
     SignUp: {screen:SignUp},
     OTP: {screen:OTP},
-    Home: {screen: Home}
+    Home: {screen: Home},
+    EditProfile: { screen: EditProfile }
     },
   );
 
