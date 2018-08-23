@@ -12,6 +12,7 @@ import authReducer from './reducers/authReducer'
 import isConnected from './reducers/isConnected'
 import navigationReducer from './reducers/navigation'
 import ui from './reducers/ui'
+import homeReducer from './reducers/homeReducer'
 import {combineReducers} from 'redux'
 
 
@@ -19,14 +20,21 @@ import {combineReducers} from 'redux'
 const initialState = {};
 
 const config = {
-  key: "root",
+  key: "primary",
   storage,
 };
 
+const config1 = {
+  key: 'batch',
+  storage
+}
+
 const AuthReducer = persistReducer(config, authReducer);
+const HomeReducer = persistReducer(config1, homeReducer)
 
 const rootReducer = combineReducers({
   AuthReducer,
+  HomeReducer,
   isConnected,
   nav: navigationReducer,
   ui
