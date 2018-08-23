@@ -50,14 +50,14 @@ class SignIn extends Component {
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         NetInfo.isConnected.addEventListener('connectionChange', this._handleConnectionChange);
         AsyncStorage.getItem('token').then((token)=>{
             if(token != null){
                 this.props.navigation.navigate('Home')
-                console.log("mounting", token)
             }
         })
+        // this.props.onAutoSignIn
     }
     
     componentWillUnmount() {
@@ -66,13 +66,11 @@ class SignIn extends Component {
 
     _handleConnectionChange = (isConnected) => {
         this.props.network({status: isConnected})
-        // dispatch(isConnected({ status: isConnected }));
     };
     
 
     signUp = () => {
         this.props.navigation.navigate('SignUp')
-        // dispatch(NavigationActions.navigate({ routeName: 'SignUp' }))
     }
 
 
@@ -278,7 +276,7 @@ const mapStateToProps = state => {
       isLoading: state.ui.isLoading,
       isConnected: state.isConnected.isConnected
     };
-  };
+};
   
   const mapDispatchToProps = dispatch => {
     return {
