@@ -7,7 +7,7 @@ import {
   persistStore,
   persistReducer
 } from "redux-persist";
-import storage from "redux-persist/es/storage";
+import storage from "redux-persist/lib/storage";
 import authReducer from './reducers/authReducer'
 import isConnected from './reducers/isConnected'
 import navigationReducer from './reducers/navigation'
@@ -24,16 +24,16 @@ const config = {
   storage,
 };
 
-const config1 = {
-  key: 'batch',
-  storage
-}
+// const config1 = {
+//   key: 'batch',
+//   storage
+// }
 
-const AuthReducer = persistReducer(config, authReducer);
-const HomeReducer = persistReducer(config1, homeReducer)
+// const AuthReducer = persistReducer(config, homeReducer);
+const HomeReducer = persistReducer(config, homeReducer)
 
 const rootReducer = combineReducers({
-  AuthReducer,
+  authReducer,
   HomeReducer,
   isConnected,
   nav: navigationReducer,

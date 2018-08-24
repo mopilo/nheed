@@ -1,7 +1,11 @@
-import { HOME_SUCCESS, ERROR } from "../Actions/actionType";
+import { HOME_SUCCESS, PROFILE, MY_PROFILE, GRID_POST } from "../Actions/actionType";
 
 const initialState = {
   data: [],
+  profileData: [],
+  pic: '',
+  id: '',
+  user: ''
   // error: undefined
 };
 
@@ -12,11 +16,22 @@ const reducer = (state = initialState, action) => {
         ...state,
         data: action.data
       };
-    // case ERROR:
-    //   return {
-    //     ...state,
-    //     error: action.error
-    //   };
+    case PROFILE:
+      return {
+        ...state,
+        profileData: action.data,
+        pic: action.pic
+      };
+    case MY_PROFILE:
+      return {
+        ...state,
+        id: action.acctId
+      };
+    case GRID_POST:
+      return {
+        ...state,
+        user: action.user
+      };
     default:
       return state;
   }

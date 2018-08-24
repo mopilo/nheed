@@ -50,7 +50,7 @@ class SignIn extends Component {
         }
     }
 
-    componentWillMount() {
+    componentWillMount(){
         NetInfo.isConnected.addEventListener('connectionChange', this._handleConnectionChange);
         AsyncStorage.getItem('token').then((token)=>{
             if(token != null){

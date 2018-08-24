@@ -4,42 +4,38 @@ import {
     StyleSheet,
     Text,
     View,
-    Image,
     FlatList,
     NetInfo,
-    AsyncStorage,
-    ToastAndroid,
     TouchableOpacity,
     TouchableNativeFeedback,
-    TouchableWithoutFeedback,
     RefreshControl,
-    Dimensions,
     ActivityIndicator
 } from 'react-native';
 import { CachedImage,   } from 'react-native-cached-image';
+import MIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import {connect} from 'react-redux'
 import {isConnected} from '../../store/Actions/isConnected'
-import {fetchHomeRequest} from '../../store/Actions/index'
+import {fetchHomeRequest, fetchProfile, fetchMyProfile, fetchPostDetails} from '../../store/Actions/index'
 
 class Home extends PureComponent {
 
     //static navigation to hold nav icons and titles
-    static navigationOptions = ({  }) => {
-        // const { params = {} } = navigation.state
+    static navigationOptions = ({navigation }) => {
+        const { params = {} } = navigation.state
         return {
-            // headerRight: (
-            //     <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', margin: 10}}>
-            //         <MIcon name='bell' size={23} color='black' onPress={()=> alert('Notification')} style={{margin: 4}}/>
-            //         <TouchableNativeFeedback onPress={()=> navigation.navigate('MyProfile')}>
-            //             <CachedImage
-            //                 source={{ uri: params.imageUri }}
-            //                 style={{ width: 30, height: 30, borderRadius: 5}}
-            //             />
-            //         </TouchableNativeFeedback>
+            headerRight: (
+                <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', margin: 10}}>
+                    <MIcon name='bell' size={23} color='black' onPress={()=> alert('Notification')} style={{margin: 4}}/>
+                    <TouchableNativeFeedback onPress={()=> navigation.navigate('EditProfile')}>
+                        <CachedImage
+                            source={{ uri: params.pic }}
+                            style={{ width: 30, height: 30, borderRadius: 5}}
+                        />
+                    </TouchableNativeFeedback>
                     
-            //     </View>
-            // ),
-            header: null
+                </View>
+            ),
+            headerLeft: null
         }
     };
 
@@ -61,7 +57,9 @@ class Home extends PureComponent {
 
     componentDidMount() {
         NetInfo.isConnected.addEventListener('connectionChange', this._handleConnectionChange);
+        this.props.myProfile()
         this.props.homeRequest()
+        console.log('kfkkf', this.props.pic)
     }
     
     componentWillUnmount() {
@@ -72,65 +70,35 @@ class Home extends PureComponent {
         this.props.network({status: isConnected})
     };
 
+    componentWillReceiveProps(nextProps) {
+        if ( nextProps.pic) {
+            this.props.navigation.setParams({ 'pic': this.props.pic });
+            console.log(nextProps.props)
+        }
+    }
+
     
     userProfile =  (item) => {
-
+        this.props.viewProfile(item)
     }
-    
-
-    //re-renders to show like
-    // reRender = (photoId) => {
-    //     const url = REQUEST_URL + HOME_URL + this.state.userId + HOME_URL_LAST;
-    //     fetch(url, {
-    //         headers: {
-    //             'content-type': 'application/json',
-    //             'Accept': 'application/json',
-    //             'Authorization': `Bearer ${this.state.token}`
-    //         }
-    //     })
-    //         .then(res => { return res.json() })
-    //         .then((resData) => {
-    //             if (resData.message) {
-    //                 ToastAndroid.showWithGravity(
-    //                     resData.message,
-    //                     ToastAndroid.SHORT,
-    //                     ToastAndroid.CENTER
-    //                 );
-    //             }
-    //             else {
-    //                 this.setState({
-    //                     data: resData.data
-    //                 })
-    //             }
-
-    //             return resData;
-    //         }).catch((error) => {
-    //             console.log(error)
-    //         })
-    // }
 
 
     // listPost = (photoId) => {
     //     this.props.navigation.navigate('ListPost', {index: photoId, profilePic: this.state.res.profile_picture})
     // }
 
-    // DetailPage = (user) => {
-    //     this.props.navigation.navigate('DetailPage', {index: user})
-    // }
+    DetailPage = (user) => {
+        // this.props.navigation.navigate('DetailPage', {index: user})
+        this.props.detailPage(user)
+    }
 
 
     onRefresh = () => {
-        this.setState({refresh: true});
-        this.fetchData()
+        this.props.homeRequest()
     }
 
     //item from flat list
     renderItem = ({ item, index }) => {
-        // let isViewable = this.state.view
-        // let time = item.inserted_at;
-        // let utcDate = time;
-        // let localDate = new Date(utcDate);
-        // let now = moment(localDate, 'YYYY-MM-DDTHH:mm:ss').fromNow(true);
         return (
             <View style={{flex:1, backgroundColor: '#fff'}}>
             {/* card */}
@@ -175,7 +143,7 @@ class Home extends PureComponent {
                     extraData={this.state}
                     refreshControl = {
                         <RefreshControl
-                            refreshing={this.state.refresh}
+                            refreshing={this.props.isLoading}
                             onRefresh={this.onRefresh}
                         />
                     }
@@ -218,7 +186,8 @@ const mapStateToProps = state => {
     return {
       isLoading: state.ui.isLoading,
       isConnected: state.isConnected.isConnected,
-      data: state.HomeReducer.data
+      data: state.HomeReducer.data,
+      pic: state.HomeReducer.pic
     };
 };
   
@@ -226,7 +195,10 @@ const mapStateToProps = state => {
     return {
         // onTryAuth: (authData) => dispatch(loginUser(authData)),
         homeRequest: () => dispatch(fetchHomeRequest()),
-        network: (status) => dispatch(isConnected(status))
+        network: (status) => dispatch(isConnected(status)),
+        myProfile: () => dispatch(fetchProfile()),
+        viewProfile: (item) =>  dispatch(fetchMyProfile(item)),
+        detailPage: (user) => dispatch(fetchPostDetails(user))
     };
   };
   export default connect(mapStateToProps, mapDispatchToProps)(Home);

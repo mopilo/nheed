@@ -10,6 +10,8 @@ export const UI_STOP_LOADING = "UI_STOP_LOADING";
 export const CHANGE_CONNECTION_STATUS = "CHANGE_CONNECTION_STATUS";
 
 export const HOME_SUCCESS = 'HOME_SUCCESS';
-export const ERROR = 'ERROR';
+export const PROFILE = 'PROFILE';
+export const MY_PROFILE = 'MY_PROFILE'
+export const GRID_POST = 'GRID_POST'
 
 export{login, register, otp};
