@@ -59,6 +59,7 @@ class Home extends PureComponent {
         NetInfo.isConnected.addEventListener('connectionChange', this._handleConnectionChange);
         this.props.myProfile()
         this.props.homeRequest()
+        // this.props.navigation.setParams({ pic: this.props.pic });
         console.log('kfkkf', this.props.pic)
     }
     
@@ -68,12 +69,13 @@ class Home extends PureComponent {
 
     _handleConnectionChange = (isConnected) => {
         this.props.network({status: isConnected})
+        console.log(isConnected)
     };
 
     componentWillReceiveProps(nextProps) {
-        if ( nextProps.pic) {
-            this.props.navigation.setParams({ 'pic': this.props.pic });
-            console.log(nextProps.props)
+        if ( nextProps.pic != this.props.pic) {
+            this.props.navigation.setParams({ 'pic': nextProps.pic });
+            console.log(nextProps.pic)
         }
     }
 
@@ -186,19 +188,18 @@ const mapStateToProps = state => {
     return {
       isLoading: state.ui.isLoading,
       isConnected: state.isConnected.isConnected,
-      data: state.HomeReducer.data,
-      pic: state.HomeReducer.pic
+      data: state.homeReducer.data,
+      pic: state.homeReducer.pic
     };
 };
   
   const mapDispatchToProps = dispatch => {
     return {
-        // onTryAuth: (authData) => dispatch(loginUser(authData)),
         homeRequest: () => dispatch(fetchHomeRequest()),
         network: (status) => dispatch(isConnected(status)),
         myProfile: () => dispatch(fetchProfile()),
-        viewProfile: (item) =>  dispatch(fetchMyProfile(item)),
-        detailPage: (user) => dispatch(fetchPostDetails(user))
+        // viewProfile: (item) =>  dispatch(fetchMyProfile(item)),
+        // detailPage: (user) => dispatch(fetchPostDetails(user))
     };
   };
   export default connect(mapStateToProps, mapDispatchToProps)(Home);

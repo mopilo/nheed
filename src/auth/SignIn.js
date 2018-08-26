@@ -52,12 +52,13 @@ class SignIn extends Component {
 
     componentWillMount(){
         NetInfo.isConnected.addEventListener('connectionChange', this._handleConnectionChange);
-        AsyncStorage.getItem('token').then((token)=>{
-            if(token != null){
-                this.props.navigation.navigate('Home')
-            }
-        })
-        // this.props.onAutoSignIn
+        // AsyncStorage.getItem('token').then((token)=>{
+        //     if(token != null){
+        //         this.props.navigation.navigate('Home')
+        //     }
+        // })
+        this.props.loggedIn ? this.props.navigation.navigate('Home') :  this.props.navigation.navigate('SignIn')
+
     }
     
     componentWillUnmount() {
@@ -65,7 +66,7 @@ class SignIn extends Component {
     }
 
     _handleConnectionChange = (isConnected) => {
-        this.props.network({status: isConnected})
+        this.props.network({isConnected})
     };
     
 
@@ -274,7 +275,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
       isLoading: state.ui.isLoading,
-      isConnected: state.isConnected.isConnected
+      isConnected: state.isConnected.isConnected,
+      loggedIn: state.authReducer.loggedIn
     };
 };
   

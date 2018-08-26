@@ -83,7 +83,8 @@ export const authSetTokenUserId= (token, userId)=>{
     return{
         type: login,
         token: token,
-        userId: userId
+        userId: userId,
+        loggedIn: true
     };
 }
 

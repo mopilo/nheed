@@ -9,6 +9,8 @@ export const fetchHomeRequest = () => (dispatch, getState) => {
     const { userId, token} = getState().authReducer;
     const {isConnected} = getState().isConnected
 
+    
+
     const url = REQUEST_URL + HOME_URL + userId + HOME_URL_LAST;
     // if(!isConnected){
     //     ToastAndroid.showWithGravity(
@@ -104,26 +106,26 @@ export const profileAsync = (data, pic) => {
     }
 }
 
-export const fetchMyProfile = (item) => (dispatch) => {
-    dispatch(NavigationActions.navigate({ routeName: 'EditProfile' }))
-    dispatch(userAsync(item))
+// export const fetchMyProfile = (item) => (dispatch) => {
+//     dispatch(NavigationActions.navigate({ routeName: 'ViewProfile' }))
+//     dispatch(userAsync(item))
 
-}
+// }
 
-export const userAsync = (item) => {
-    return {
-        type: MY_PROFILE,
-        acctId: item.toString()
-    }
-}
+// export const userAsync = (item) => {
+//     return {
+//         type: MY_PROFILE,
+//         acctId: item.toString()
+//     }
+// }
 
-export const fetchPostDetails = (user) => (dispatch) => {
-    dispatch(NavigationActions.navigate({ routeName: 'GridPage' }))
-    dispatch(detailAsync(user))
-}
-export default detailAsync = (user) => {
-    return {
-        type: GRID_POST,
-        user: user
-    }
-}
+// export const fetchPostDetails = (user) => (dispatch) => {
+//     dispatch(NavigationActions.navigate({ routeName: 'GridPage' }))
+//     dispatch(detailAsync(user))
+// }
+// export default detailAsync = (user) => {
+//     return {
+//         type: GRID_POST,
+//         user: user
+//     }
+// }

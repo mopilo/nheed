@@ -12,6 +12,7 @@ import OTP from '../../src/auth/OTP'
 import Home from '../../src/tabs/Home'
 import EditProfile from '../../src/profile/EditProfile'
 import GridPage from '../../src/screen/GridPage'
+import ViewProfile from '../../src/profile/ViewProfile'
 
 export const AppNavigator = createStackNavigator({
     SignIn:{
@@ -21,7 +22,8 @@ export const AppNavigator = createStackNavigator({
     OTP: {screen:OTP},
     Home: {screen: Home},
     EditProfile: { screen: EditProfile },
-    GridPage: {screen: GridPage}
+    GridPage: {screen: GridPage},
+    ViewProfile: {screen: ViewProfile}
     },
   );
 

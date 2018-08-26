@@ -17,8 +17,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImagePicker from 'react-native-image-picker'
 import { Switch } from 'react-native-switch';
 import { Picker } from 'native-base';
-import SignIn from '../auth/SignUp';
-import { REQUEST_URL, HOME_URL, PICTURE } from '../Utility/local'
+import { REQUEST_URL, HOME_URL, PICTURE } from '../../component/Utility/local'
 import RNFetchBlob from 'react-native-fetch-blob';
 
 
@@ -269,7 +268,7 @@ export default class EditProfile extends Component {
                                         this.state.photo :
                                     this.state.profile_picture ?
                                     {uri:this.state.profile_picture} :
-                                    require('../../assets/user.png') 
+                                    require('../../assets/images/user.png') 
 
                                 }
                                 resizeMode='cover'

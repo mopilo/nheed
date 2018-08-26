@@ -3,7 +3,8 @@ import {login, register, otp} from '../Actions/actionType'
 const initialState= {
     token: null,
     userId: null,
-    email: null
+    email: null,
+    loggedIn: false
 }
 
 export default function(state=initialState, action){
@@ -12,7 +13,8 @@ export default function(state=initialState, action){
             return {
                 ...state,
                 token: action.token,
-                userId: action.userId
+                userId: action.userId, 
+                loggedIn: action.loggedIn
             };
         case register:
             return{
