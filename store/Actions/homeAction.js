@@ -1,6 +1,6 @@
 import {uiStartLoading, uiStopLoading} from './ui'
 import {HOME_SUCCESS, PROFILE, MY_PROFILE, GRID_POST} from './actionType'
-import {REQUEST_URL, HOME_URL, HOME_URL_LAST} from '../../component/Utility/local'
+import {REQUEST_URL, HOME_URL, HOME_URL_LAST, HOME_POST} from '../../component/Utility/local'
 import{ToastAndroid, AsyncStorage} from 'react-native'
 import { NavigationActions } from 'react-navigation';
 
@@ -146,13 +146,48 @@ export const userAsync = (item, phone) => {
     }
 }
 
-// export const fetchPostDetails = (user) => (dispatch) => {
-//     dispatch(NavigationActions.navigate({ routeName: 'GridPage' }))
-//     dispatch(detailAsync(user))
-// }
-// export default detailAsync = (user) => {
-//     return {
-//         type: GRID_POST,
-//         user: user
-//     }
-// }
+export const fetchPostDetails = (user) => (dispatch, getState) => {
+    const {token} = getState().authReducer;
+    const url = REQUEST_URL + HOME_URL + user + HOME_POST;
+    if(token){
+        fetch(url, {
+            headers: {
+                'content-type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then((res) => { return res.json()})
+        .then((resData) => {
+            if (resData.message) {
+                ToastAndroid.showWithGravity(
+                    resData.message,
+                    ToastAndroid.SHORT,
+                    ToastAndroid.CENTER
+                );             }
+            else {
+                dispatch(
+                    detailAsync(
+                        resData.data,
+                    )
+                )
+                dispatch(NavigationActions.navigate({ routeName: 'GridPage' }))
+            }
+            return resData
+            
+        })
+        .catch((err) => {
+            ToastAndroid.showWithGravity(
+                err,
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+            );        
+        })
+    }
+}
+export default detailAsync = (user) => {
+    return {
+        type: GRID_POST,
+        user: user
+    }
+}

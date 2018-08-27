@@ -30,26 +30,26 @@ import { CachedImage } from 'react-native-cached-image';
 
 class ViewProfile extends Component {
 
-    // static navigationOptions = ({ navigation }) => {
-    //     const { params = {} } = navigation.state
-    //     return {
-    //         headerRight: (
-    //             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-    //                 <Icon name="phone-call" size={20} style={{ padding: 8 }} color='#000' onPress={
-    //                     () => {
-    //                         if (params.phone === undefined && params.phone === null) { return }
-    //                         else {
-    //                             Linking.openURL(`tel: ${params.phone}`).catch(err => console.error('An error occurred', err))
-    //                             console.log(params.phone)
-    //                         }
-    //                     }} />
-    //                 <Icon name="message-square" size={20} color='#000' style={{ padding: 8 }} onPress={() => alert('message')} />
-    //                 <MIcon name='dots-vertical' size={23} color='black' onPress={()=> alert('Notification')} style={{margin: 4}}/>
-    //             </View>
+    static navigationOptions = ({ navigation }) => {
+        const { params = {} } = navigation.state
+        return {
+            headerRight: (
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                    <Icon name="phone-call" size={20} style={{ padding: 8 }} color='#000' onPress={
+                        () => {
+                            if (params.phone === undefined && params.phone === null) { return }
+                            else {
+                                Linking.openURL(`tel: ${params.phone}`).catch(err => console.error('An error occurred', err))
+                                console.log(params.phone)
+                            }
+                        }} />
+                    <Icon name="message-square" size={20} color='#000' style={{ padding: 8 }} onPress={() => alert('message')} />
+                    <MIcon name='dots-vertical' size={23} color='black' onPress={()=> alert('Notification')} style={{margin: 4}}/>
+                </View>
 
-    //         )
-    //     }
-    // };
+            )
+        }
+    };
 
     //state to hold initial data
     constructor(props) {
@@ -87,7 +87,12 @@ class ViewProfile extends Component {
     _handleConnectionChange = (isConnected) => {
         this.props.network({status: isConnected})
     };
-
+//last thing i added...
+    componentWillReceiveProps(nextProps) {
+        if ( nextProps.phone != this.props.phone) {
+            this.props.navigation.setParams({ 'phone': nextProps.phone });
+        }
+    }
 
     async phone() {
         const chckPhonePermission = PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.CALL_PHONE);

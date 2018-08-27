@@ -66,13 +66,11 @@ class Home extends PureComponent {
     }
 
 
-    // listPost = (photoId) => {
-    //     this.props.navigation.navigate('ListPost', {index: photoId, profilePic: this.state.res.profile_picture})
-    // }
+    
 
     DetailPage = (user) => {
         // this.props.navigation.navigate('DetailPage', {index: user})
-        // this.props.detailPage(user)
+        this.props.detailPage(user)
     }
 
 
@@ -180,7 +178,7 @@ const mapStateToProps = state => {
         network: (status) => dispatch(isConnected(status)),
         myProfile: () => dispatch(fetchProfile()),
         viewProfile: (item) =>  dispatch(fetchMyProfile(item)),
-        // detailPage: (user) => dispatch(fetchPostDetails(user))
+        detailPage: (user) => dispatch(fetchPostDetails(user))
     };
   };
   export default connect(mapStateToProps, mapDispatchToProps)(Home);
