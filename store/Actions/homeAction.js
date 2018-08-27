@@ -12,13 +12,13 @@ export const fetchHomeRequest = () => (dispatch, getState) => {
     
 
     const url = REQUEST_URL + HOME_URL + userId + HOME_URL_LAST;
-    // if(!isConnected){
-    //     ToastAndroid.showWithGravity(
-    //         "Field can't be empty",
-    //         ToastAndroid.SHORT,               
-    //         ToastAndroid.CENTER
-    //     );
-    // }
+    if(!isConnected){
+        ToastAndroid.showWithGravity(
+            "Field can't be empty",
+            ToastAndroid.SHORT,               
+            ToastAndroid.CENTER
+        );
+    }
     if(token){
         dispatch(uiStartLoading());
         fetch(url, {
@@ -67,7 +67,7 @@ export const setAsync = (data) => {
 }
 
 export const fetchProfile = () => (dispatch, getState) => {
-    const { userId, token} = getState().authReducer;
+    const {userId, token} = getState().authReducer;
     const url = REQUEST_URL + HOME_URL + userId;
 
     if(token){
@@ -98,26 +98,53 @@ export const fetchProfile = () => (dispatch, getState) => {
     }
 }
 
-export const profileAsync = (data, pic) => {
+export const profileAsync = (profile, pic) => {
     return{
         type: PROFILE,
-        profileData: data,
+        profileData: profile,
         pic: pic
     }
 }
 
-// export const fetchMyProfile = (item) => (dispatch) => {
-//     dispatch(NavigationActions.navigate({ routeName: 'ViewProfile' }))
-//     dispatch(userAsync(item))
+export const fetchMyProfile = (item) => (dispatch, getState) => {
+    const {token} = getState().authReducer;
+    const url = REQUEST_URL + HOME_URL + item;
+    if(token){
+        fetch(url, {
+            headers: {
+                'content-type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then((res) => { return res.json() })
+        .then((resData) => {
+            dispatch(
+                userAsync(
+                    resData.data,
+                    resData.data.phone
+                )
+            )
+            dispatch(NavigationActions.navigate({ routeName: 'ViewProfile' }))
+            return resData
+        })
+        .catch((err) => {
+            ToastAndroid.showWithGravity(
+                err,
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+            );        
+        })
+    }
+}
 
-// }
-
-// export const userAsync = (item) => {
-//     return {
-//         type: MY_PROFILE,
-//         acctId: item.toString()
-//     }
-// }
+export const userAsync = (item, phone) => {
+    return {
+        type: MY_PROFILE,
+        user: item,
+        phone: phone
+    }
+}
 
 // export const fetchPostDetails = (user) => (dispatch) => {
 //     dispatch(NavigationActions.navigate({ routeName: 'GridPage' }))

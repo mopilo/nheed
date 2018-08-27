@@ -11,7 +11,7 @@ import {
     RefreshControl,
     ActivityIndicator
 } from 'react-native';
-import { CachedImage,   } from 'react-native-cached-image';
+import { CachedImage} from 'react-native-cached-image';
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import {connect} from 'react-redux'
 import {isConnected} from '../../store/Actions/isConnected'
@@ -39,28 +39,10 @@ class Home extends PureComponent {
         }
     };
 
-    constructor(props){
-        super(props)
-        this.state = {
-            textInputs: [],
-            comment: '',
-            lastPress: 0,
-            liked: '',
-            likedddd: [],
-            isLoading: false,
-            disabled: false,
-            volume: 0,
-            refresh: false
-            // view: ''
-        }
-    }
-
     componentDidMount() {
         NetInfo.isConnected.addEventListener('connectionChange', this._handleConnectionChange);
         this.props.myProfile()
         this.props.homeRequest()
-        // this.props.navigation.setParams({ pic: this.props.pic });
-        console.log('kfkkf', this.props.pic)
     }
     
     componentWillUnmount() {
@@ -69,7 +51,6 @@ class Home extends PureComponent {
 
     _handleConnectionChange = (isConnected) => {
         this.props.network({status: isConnected})
-        console.log(isConnected)
     };
 
     componentWillReceiveProps(nextProps) {
@@ -91,7 +72,7 @@ class Home extends PureComponent {
 
     DetailPage = (user) => {
         // this.props.navigation.navigate('DetailPage', {index: user})
-        this.props.detailPage(user)
+        // this.props.detailPage(user)
     }
 
 
@@ -118,7 +99,7 @@ class Home extends PureComponent {
                     <View style={{flex: 0.5, alignItems: 'center', justifyContent: 'center', margin: 4}}>
                             <TouchableNativeFeedback onPress={()=> this.DetailPage(item.account.id)}>
                                 <View style={{borderRadius: 50, height: 50, width: 50, borderColor: '#000', borderWidth: 1, alignItems: 'center', justifyContent: 'center', marginRight: 8}}>
-                                    <Text style={{fontFamily: 'Lato-Regular', fontSize: 14, alignSelf: 'center'}}>{this.state.newMedia}</Text>
+                                    <Text style={{fontFamily: 'Lato-Regular', fontSize: 14, alignSelf: 'center'}}>0</Text>
                                 </View>
                             </TouchableNativeFeedback>
                     </View>
@@ -142,7 +123,7 @@ class Home extends PureComponent {
                     data={this.props.data}
                     renderItem={this.renderItem}
                     keyExtractor={(item, index) => item.id.toString()}
-                    extraData={this.state}
+                    // extraData={this.state}
                     refreshControl = {
                         <RefreshControl
                             refreshing={this.props.isLoading}
@@ -198,7 +179,7 @@ const mapStateToProps = state => {
         homeRequest: () => dispatch(fetchHomeRequest()),
         network: (status) => dispatch(isConnected(status)),
         myProfile: () => dispatch(fetchProfile()),
-        // viewProfile: (item) =>  dispatch(fetchMyProfile(item)),
+        viewProfile: (item) =>  dispatch(fetchMyProfile(item)),
         // detailPage: (user) => dispatch(fetchPostDetails(user))
     };
   };

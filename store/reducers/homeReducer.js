@@ -4,8 +4,9 @@ const initialState = {
   data: [],
   profileData: [],
   pic: '',
-  // id: '',
-  // user: ''
+  idData: '',
+  user: '',
+  phone: ''
   // error: undefined
 };
 
@@ -19,19 +20,20 @@ const reducer = (state = initialState, action) => {
     case PROFILE:
       return {
         ...state,
-        profileData: action.data,
+        profileData: action.profile,
         pic: action.pic
       };
-    // case MY_PROFILE:
-    //   return {
-    //     ...state,
-    //     id: action.acctId
-    //   };
-    // case GRID_POST:
-    //   return {
-    //     ...state,
-    //     user: action.user
-    //   };
+    case MY_PROFILE:
+      return {
+        ...state,
+        idData: action.user,
+        phone: action.phone
+      };
+    case GRID_POST:
+      return {
+        ...state,
+        user: action.user
+      };
     default:
       return state;
   }
