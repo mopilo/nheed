@@ -15,6 +15,6 @@ export const MY_PROFILE = 'MY_PROFILE'
 export const GRID_POST = 'GRID_POST'
 
 
-export const FETCH_VIEW_PROFILE = 'FETCH_VIEW_PROFILE'
+export const FETCH_EDIT_PROFILE = 'FETCH_EDIT_PROFILE'
 
 export{login, register, otp};

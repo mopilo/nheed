@@ -4,13 +4,13 @@ import ui from './ui'
 import isConnected from './isConnected'
 import navigationReducer from './navigation'
 import homeReducer from './homeReducer'
-import viewReducer from './viewProfileReducer'
+import editProfileReducer from './editProfileReducer'
 
 export default combineReducers({
     authReducer,
     ui,
     homeReducer,
     isConnected,
-    viewReducer,
+    editProfileReducer,
     nav: navigationReducer
 })

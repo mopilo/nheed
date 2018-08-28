@@ -1,17 +1,15 @@
-import {FETCH_VIEW_PROFILE} from '../Actions/actionType'
+import {FETCH_EDIT_PROFILE} from '../Actions/actionType'
 
 const initialState= {
-    viewData: [], 
-    phone: ''
+    editData: [], 
 }
 
 export default function(state=initialState, action){
     switch(action.type){
-        case FETCH_VIEW_PROFILE:
+        case FETCH_EDIT_PROFILE:
             return {
                 ...state,
-                viewData: action.view,
-                phone: action.phone
+                editData: action.edit
             };
         default:
             return state

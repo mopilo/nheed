@@ -15,13 +15,15 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImagePicker from 'react-native-image-picker'
+import {connect} from 'react-redux'
 import { Switch } from 'react-native-switch';
 import { Picker } from 'native-base';
 import { REQUEST_URL, HOME_URL, PICTURE } from '../../component/Utility/local'
+import {isConnected} from '../../store/Actions/isConnected'
 import RNFetchBlob from 'react-native-fetch-blob';
+import { fetchEditProfile, fetchNewProfile } from '../../store/Actions/index';
 
-
-export default class EditProfile extends Component {
+class EditProfile extends Component {
 
     state = {
         name: '',
@@ -39,123 +41,83 @@ export default class EditProfile extends Component {
         profile_picture: null
     }
     static navigationOptions = {
-
     }
 
     componentDidMount(){
-
-        // CHECKING FOR INTERNET CONNECTION
-        NetInfo.isConnected.fetch().then(isConnected => {
-            if(!isConnected){
-                alert('Device Offline')
-            }
-            else{
-                this.setState({isLoading: true}, this.fetchData)
-            }
-        })
+        NetInfo.isConnected.addEventListener('connectionChange', this._handleConnectionChange);
+        this.props.storedProfile()
     }
 
-    // updating profile
-
-    fetchData(){
-        AsyncStorage.multiGet(['token', 'userId']).then(stores => {
-            const token = stores[0][1];
-            const userId = stores[1][1];
-            const url = REQUEST_URL + HOME_URL + userId 
-            if(token){
-                console.log('i seeee ' + url)
-                fetch(url, {
-                    headers: {
-                        'content-type': 'application/json',
-                        'Accept': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    }
-                })
-                    .then(res => { return res.json()})
-                    .then((resData) => {
-                        if (resData.message) {
-                            this.setState({isLoading: false})
-                            alert(resData.message)
-                        }
-                        else {
-                            this.setState({
-                                isLoading: false,
-                                dataSource: resData.data,
-                                name: resData.data.name,
-                                phone: resData.data.phone,
-                                address: resData.data.address,
-                                location: resData.data.location,
-                                bio: resData.data.bio,
-                                email: resData.data.email,
-                                profile_picture: resData.data.profile_picture
-                            })
-                            console.log("data", this.state.dataSource.name)
-                        }
-                        return resData;
-                    })
-                    .catch(() => { alert('There was an error') })
-    
-            }
-            else{
-                this.props.navigation.navigate('SingIn')
-            }
-        })
+    componentWillUnmount() {
+        NetInfo.isConnected.removeEventListener('connectionChange', this._handleConnectionChange);
     }
+
+    _handleConnectionChange = (isConnected) => {
+        this.props.network({status: isConnected})
+    };
 
     // button for saving profile
     editProfile = () => {
-        AsyncStorage.multiGet(['token', 'userId'])
-            .then(stores => {
-                const token = stores[0][1];
-                const userId = stores[1][1];
-                const url = REQUEST_URL + HOME_URL + userId;
-                if (token) {
-                    fetch(url, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        },
-                        body: JSON.stringify({
-                            account: {
-                                name: this.state.name,
-                                phone: this.state.phone,
-                                email: this.state.email,
-                                address: this.state.address,
-                                bio: this.state.bio,
-                                url: this.state.url,
-                                acct: this.state.acct
-                            }
-                        })
-                    })
-                        .then((res) => { return res.json() })
-                        .then((resData) => {
-                            if (resData.error) {
-                                ToastAndroid.showWithGravity(
-                                    resData.error,
-                                    ToastAndroid.LONG,
-                                    ToastAndroid.CENTER
-                                );
-                            }
-                            else {
-                                console.log(resData.data)
-                                this.props.navigation.navigate('HomeTab')
-                            }
-                            return resData;
-                        })
-                        .catch(() => {
-                            ToastAndroid.showWithGravity(
-                                'Error editing profile',
-                                ToastAndroid.SHORT,
-                                ToastAndroid.CENTER
-                            );
-                        }).done
-                }
-                else {
-                    this.props.navigation.navigate('SignIn');
-                }
-            });
+        const newData = {
+            name: this.state.name,
+            phone: this.state.phone,
+            email: this.state.email,
+            address: this.state.address,
+            bio: this.state.bio,
+            url: this.state.url,
+            acct: this.state.acct
+        }
+        this.props.newProfileData(newData);
+
+        // let token = this.state.token
+        // let userId = this.state.userId
+        // const url = REQUEST_URL + HOME_URL + userId;
+        // if (token) {
+        //     fetch(url, {
+        //         method: 'PUT',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'Accept': 'application/json',
+        //             'Authorization': `Bearer ${token}`
+        //         },
+        //         body: JSON.stringify({
+        //             account: {
+        //                 name: this.state.name,
+        //                 phone: this.state.phone,
+        //                 email: this.state.email,
+        //                 address: this.state.address,
+        //                 bio: this.state.bio,
+        //                 url: this.state.url,
+        //                 acct: this.state.acct
+        //             }
+        //         })
+        //     })
+        //         .then((res) => { return res.json() })
+        //         .then((resData) => {
+        //             if (resData.error) {
+        //                 ToastAndroid.showWithGravity(
+        //                     resData.error,
+        //                     ToastAndroid.LONG,
+        //                     ToastAndroid.CENTER
+        //                 );
+        //             }
+        //             else {
+        //                 console.log(resData.data)
+        //                 this.props.navigation.navigate('HomeTab')
+        //             }
+        //             return resData;
+        //         })
+        //         .catch(() => {
+        //             ToastAndroid.showWithGravity(
+        //                 'Error editing profile',
+        //                 ToastAndroid.SHORT,
+        //                 ToastAndroid.CENTER
+        //             );
+        //         }).done
+        // }
+        // else {
+        //     this.props.navigation.navigate('SignIn');
+        // }
     }
 
 // add profile picture and send to server
@@ -191,56 +153,50 @@ export default class EditProfile extends Component {
                     profile_image: profile_image
                 });
 
-                AsyncStorage.multiGet(['token', 'userId'])
-                    .then(stores => {
-                        const token = stores[0][1];
-                        const userId = stores[1][1];
-                        const url = REQUEST_URL + HOME_URL + userId + PICTURE;
-                        if (token) {
-                            RNFetchBlob.fetch('PUT', url, {
-                                'Accept': 'application/json',
-                                'Content-Type': 'multipart/form-data',
-                                'Authorization': `Bearer ${token}`
-                            }, [
-
-                                    // custom content type
-                                    { name: 'media', filename: 'avatar-png.jpg', type: 'image/jpg', data: RNFetchBlob.wrap(this.state.profile_image) },
-
-                                ])
-                                .then((res) => { return res.json() })
-                                .then((resData) => {
-                                    if (resData.error) {
-                                        ToastAndroid.showWithGravity(
-                                            resData.error,
-                                            ToastAndroid.LONG,
-                                            ToastAndroid.CENTER
-                                        );
-                                    }
-                                    else {
-                                        console.log(resData)
-                                        console.log(url)
-                                        // console.log('i see a ' + this.state.acct);
-                                    }
-                                    return resData;
-                                })
-                                .catch(() => {
-                                    ToastAndroid.showWithGravity(
-                                        'Error update profile picture',
-                                        ToastAndroid.SHORT,
-                                        ToastAndroid.CENTER
-                                    );
-                                }).done
-                        }
-                        else {
-                            this.props.navigation.navigate('SignIn');
-                        }
-                    });
+                let token = this.state.token
+                let userId = this.state.userId
+                const url = REQUEST_URL + HOME_URL + userId + PICTURE;
+                if (token) {
+                    RNFetchBlob.fetch('PUT', url, {
+                        'Accept': 'application/json',
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer ${token}`
+                    }, [
+                            // custom content type
+                            { name: 'media', filename: 'avatar-png.jpg', type: 'image/jpg', data: RNFetchBlob.wrap(this.state.profile_image) }
+                        ])
+                        .then((res) => { return res.json() })
+                        .then((resData) => {
+                            if (resData.error) {
+                                ToastAndroid.showWithGravity(
+                                    resData.error,
+                                    ToastAndroid.LONG,
+                                    ToastAndroid.CENTER
+                                );
+                            }
+                            else {
+                                console.log(resData)
+                                console.log(url)
+                                // console.log('i see a ' + this.state.acct);
+                            }
+                            return resData;
+                        })
+                        .catch(() => {
+                            ToastAndroid.showWithGravity(
+                                'Error update profile picture',
+                                ToastAndroid.SHORT,
+                                ToastAndroid.CENTER
+                            );
+                        }).done
+                }
+                else {
+                    this.props.navigation.navigate('SignIn');
+                }
             }
         });
     }
 
 // SET USER PROFILE IN ASYNC STORE
-
     onValueChange2(value) {
         this.setState({
             selected2: value
@@ -248,6 +204,8 @@ export default class EditProfile extends Component {
     }
 
     render() {
+        let edit = this.props.data
+        console.log(this.props.data)
         return (
             <ScrollView>
                 <KeyboardAvoidingView style={styles.container}>
@@ -276,19 +234,19 @@ export default class EditProfile extends Component {
 
                         </View>
                         <View style={{ flex: 2 }}>
-                            <Text style={styles.textInputFont}>{this.state.dataSource.email}</Text>
+                            <Text style={styles.textInputFont}>{edit.email}</Text>
                         </View>
                     </View>
                     <View style={styles.textInput}>
                         <TextInput
-                            placeholder={this.state.dataSource.name === null ? 'Name': this.state.dataSource.name}
+                            placeholder={edit.name === null ? 'Name': edit.name}
                             style={styles.textInputBorder}
                             value={this.state.name}
                             onChangeText={(name) => this.setState({ name })}
                             underlineColorAndroid="transparent"
                         />
                         <TextInput
-                            placeholder = {this.state.dataSource.phone === null ? 'Telephone' : this.state.dataSource.phone}
+                            placeholder = {edit.phone === null ? 'Telephone' : edit.phone}
                             keyboardType="numeric"
                             value={this.state.phone}
                             style={styles.textInputBorder}
@@ -296,7 +254,7 @@ export default class EditProfile extends Component {
                             underlineColorAndroid="transparent"
                         />
                         <TextInput
-                            placeholder={this.state.dataSource.email === null ? 'email' : this.state.dataSource.email}
+                            placeholder={edit.email === null ? 'email' : edit.email}
                             keyboardType="email-address"
                             style={styles.textInputBorder}
                             value={this.state.email}
@@ -304,14 +262,14 @@ export default class EditProfile extends Component {
                             underlineColorAndroid="transparent"
                         />
                         <TextInput
-                            placeholder={this.state.dataSource.address === null ? 'Address' : this.state.dataSource.address}
+                            placeholder={edit.address === null ? 'Address' : edit.address}
                             style={styles.textInputBorder}
                             value={this.state.address}
                             onChangeText={(address) => this.setState({ address })}
                             underlineColorAndroid="transparent"
                         />
                         <TextInput
-                            placeholder={this.state.dataSource.bio === null ? 'Bio' : this.state.dataSource.bio}
+                            placeholder={edit.bio === null ? 'Bio' : edit.bio}
                             multiline={true}
                             numberOfLines={1}
                             value={this.state.bio}
@@ -336,7 +294,7 @@ export default class EditProfile extends Component {
 
 
                         <TextInput
-                            placeholder={this.state.dataSource.url === null ? 'url' : this.state.dataSource.url}
+                            placeholder={edit.url === null ? 'url' : edit.url}
                             value={this.state.url}
                             style={styles.textInputBorder}
                             onChangeText={(url) => this.setState({ url })}
@@ -351,7 +309,6 @@ export default class EditProfile extends Component {
                                 activeText={'On'}
                                 inActiveText={'Off'}
                                 backgroundActive={'#000'}
-
                             />
                         </View>
                     </View>
@@ -398,8 +355,8 @@ const styles = StyleSheet.create({
     textInputFont: {
         fontFamily: 'Lato-Bold',
         color: '#000',
-
     },
+
     textInputBorder: {
         borderBottomWidth: 1,
         borderColor: '#000'
@@ -418,3 +375,21 @@ const styles = StyleSheet.create({
         elevation: 1
     }
 });
+
+const mapStateToProps = state => {
+    return {
+        isLoading: state.ui.isLoading,
+        isConnected: state.isConnected.isConnected,
+        data: state.editProfileReducer.editData
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        network: (status) => dispatch(isConnected(status)),
+        storedProfile: () => dispatch(fetchEditProfile()),
+        newProfileData: (newData) => dispatch(fetchNewProfile(newData))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditProfile)

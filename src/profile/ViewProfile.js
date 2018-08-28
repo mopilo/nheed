@@ -14,7 +14,6 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux'
 import {isConnected} from '../../store/Actions/isConnected'
-import {fetchViewProfile} from '../../store/Actions/index'
 import Icon from 'react-native-vector-icons/Feather';
 import { TabNavigator } from 'react-navigation';
 import { Card, CardItem, Thumbnail, Body, Left, Right, Button, Container, Tabs, Tab, TabHeading } from 'native-base';
@@ -118,39 +117,7 @@ class ViewProfile extends Component {
         }
     }
 
-    // fetchData() {
-    //     this.setState({ loading: true })
-    //     // const acctId = this.props.navigation.state.params.item;
-    //     AsyncStorage.multiGet(['token', 'userId']).then(stores => {
-    //         const token = stores[0][1];
-    //         const userId = stores[1][1];
-    //         const url = REQUEST_URL + HOME_URL + this.state.acctId;
-
-    //         fetch(url, {
-    //             headers: {
-    //                 'content-type': 'application/json',
-    //                 'Accept': 'application/json',
-    //                 'Authorization': `Bearer ${token}`
-    //             }
-    //         })
-    //         .then((res) => { return res.json() })
-    //         .then((resData) => {
-    //             this.setState({
-    //                 loading: false,
-    //                 token: token,
-    //                 userId: userId,
-    //                 res: resData.data
-    //             })
-    //             this.props.navigation.setParams({ phone: this.state.res.phone });
-    //             return resData
-    //         })
-    //         .catch(() => {
-    //             this.setState({ loading: false })
-    //             console.log('error displaying profile');
-    //         })
-    //     })
-
-    // }
+    
 
     //function call to navigate to edit screen
     // Nheed = () => {
@@ -349,7 +316,6 @@ const mapStateToProps = state => {
   
 const mapDispatchToProps = dispatch => {
 return {
-    viewProfile: () => dispatch(fetchViewProfile()),
     network: (status) => dispatch(isConnected(status)),
 };
 };

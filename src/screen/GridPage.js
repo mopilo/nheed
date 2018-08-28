@@ -23,50 +23,47 @@ const numColumns = 3;
 
 class GridPage extends Component {
 
-    // static navigationOptions = ({ navigation, transitioning }) => {
-    //     const params = navigation.state.params || {};
-    //     return{
-    //         headerLeft:
-    //         (
-    //             <TouchableOpacity disabled={transitioning} onPress={() => { navigation.navigate('MyProfile') }}>
-    //                 <View style={{ width: 40, height: 40, padding: 10, margin: 4, alignItems: 'center', justifyContent: 'center', alignContent: 'center' }}>
-    //                     <CachedImage
-    //                         source={{ uri: params.imageUri }}
-    //                         style={{ width: 30, height: 30, borderRadius: 5}}
-    //                     />
-    //                 </View>
+    static navigationOptions = ({ navigation, transitioning }) => {
+        const params = navigation.state.params || {};
+        return{
+            headerLeft:
+            (
+                <TouchableOpacity disabled={transitioning} onPress={() => { navigation.navigate('MyProfile') }}>
+                    <View style={{ width: 40, height: 40, padding: 10, margin: 4, alignItems: 'center', justifyContent: 'center', alignContent: 'center' }}>
+                        <CachedImage
+                            source={{ uri: params.pic }}
+                            style={{ width: 30, height: 30, borderRadius: 5}}
+                        />
+                    </View>
 
-    //             </TouchableOpacity>
+                </TouchableOpacity>
                 
-    //         ),
-    //         headerRight: (
-    //             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-    //                 <Icon name= 'search' size={23} color='#000000' style={{margin: 10}} onPress={()=>{navigation.navigate('Search')}}/>
-    //                 {/* <Icon name= 'more-vertical' size={23} style={{margin: 10}} onPress={()=>{navigation.navigate('PlayTab')}}/> */}
-    //                 <MIcon name='dots-vertical' size={23} color='black' onPress={()=> alert('Notification')} style={{margin: 4}}/>
-    //             </View>
-    //         )
-    //     }
-    // };
-
-    state = {
-        isLoading: false,
-        dataSource: []
-    }
-
+            ),
+            headerRight: (
+                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                    <Icon name= 'search' size={23} color='#000000' style={{margin: 10}} onPress={()=>{navigation.navigate('Search')}}/>
+                    {/* <Icon name= 'more-vertical' size={23} style={{margin: 10}} onPress={()=>{navigation.navigate('PlayTab')}}/> */}
+                    <MIcon name='dots-vertical' size={23} color='black' onPress={()=> alert('Notification')} style={{margin: 4}}/>
+                </View>
+            )
+        }
+    };
 
     formatData = (data, numColumns) => {
         const numberOfFullRows = Math.floor(data.length / numColumns);
         let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
         while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
         data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
-        numberOfElementsLastRow++;
-  }
+            numberOfElementsLastRow++;
+        }
+        return data;
+    };
 
-  return data;
-};
-
-    componentDidMount() {
+    componentWillReceiveProps(nextProps) {
+        if ( nextProps.pic != this.props.pic) {
+            this.props.navigation.setParams({ 'pic': nextProps.pic });
+            console.log(nextProps.pic)
+        }
     }
 
     // this methods holds both images and videos
@@ -83,7 +80,7 @@ class GridPage extends Component {
             />;
         }
         else {
-            return <CachedImage  onError={({ nativeEvent: {error} }) => console.log(error)} source={{ uri: item.url }} style={{ height: width/3.1, width: width/3.1,  }} resizeMode="cover"/>;
+            return <Image  onError={({ nativeEvent: {error} }) => console.log(error)} source={{ uri: item.url }} style={{ height: width/3.1, width: width/3.1,  }} resizeMode="cover"/>;
         }
         return null;
     }
@@ -140,6 +137,7 @@ const mapStateToProps = state => {
     return {
       isConnected: state.isConnected.isConnected,
       data: state.homeReducer.user,
+      pic: state.homeReducer.pic
     };
 };
   

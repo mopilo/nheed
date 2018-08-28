@@ -52,11 +52,6 @@ class SignIn extends Component {
 
     componentWillMount(){
         NetInfo.isConnected.addEventListener('connectionChange', this._handleConnectionChange);
-        // AsyncStorage.getItem('token').then((token)=>{
-        //     if(token != null){
-        //         this.props.navigation.navigate('Home')
-        //     }
-        // })
         this.props.loggedIn ? this.props.navigation.navigate('Home') :  this.props.navigation.navigate('SignIn')
 
     }
