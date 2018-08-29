@@ -7,10 +7,6 @@ import {
     ScrollView,
     Image,
     TouchableOpacity,
-    Modal,
-    TouchableHighlight,
-    AsyncStorage,
-    ToastAndroid,
     NetInfo
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -18,10 +14,9 @@ import ImagePicker from 'react-native-image-picker'
 import {connect} from 'react-redux'
 import { Switch } from 'react-native-switch';
 import { Picker } from 'native-base';
-import { REQUEST_URL, HOME_URL, PICTURE } from '../../component/Utility/local'
 import {isConnected} from '../../store/Actions/isConnected'
 import RNFetchBlob from 'react-native-fetch-blob';
-import { fetchEditProfile, fetchNewProfile } from '../../store/Actions/index';
+import { fetchEditProfile, fetchNewProfile, addNewDp } from '../../store/Actions/index';
 
 class EditProfile extends Component {
 
@@ -68,132 +63,11 @@ class EditProfile extends Component {
             acct: this.state.acct
         }
         this.props.newProfileData(newData);
-
-        // let token = this.state.token
-        // let userId = this.state.userId
-        // const url = REQUEST_URL + HOME_URL + userId;
-        // if (token) {
-        //     fetch(url, {
-        //         method: 'PUT',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             'Accept': 'application/json',
-        //             'Authorization': `Bearer ${token}`
-        //         },
-        //         body: JSON.stringify({
-        //             account: {
-        //                 name: this.state.name,
-        //                 phone: this.state.phone,
-        //                 email: this.state.email,
-        //                 address: this.state.address,
-        //                 bio: this.state.bio,
-        //                 url: this.state.url,
-        //                 acct: this.state.acct
-        //             }
-        //         })
-        //     })
-        //         .then((res) => { return res.json() })
-        //         .then((resData) => {
-        //             if (resData.error) {
-        //                 ToastAndroid.showWithGravity(
-        //                     resData.error,
-        //                     ToastAndroid.LONG,
-        //                     ToastAndroid.CENTER
-        //                 );
-        //             }
-        //             else {
-        //                 console.log(resData.data)
-        //                 this.props.navigation.navigate('HomeTab')
-        //             }
-        //             return resData;
-        //         })
-        //         .catch(() => {
-        //             ToastAndroid.showWithGravity(
-        //                 'Error editing profile',
-        //                 ToastAndroid.SHORT,
-        //                 ToastAndroid.CENTER
-        //             );
-        //         }).done
-        // }
-        // else {
-        //     this.props.navigation.navigate('SignIn');
-        // }
     }
 
 // add profile picture and send to server
     addPhoto = () => {
-        const options = {
-            title: 'Select Image',
-            quality: 1.0,
-            maxWidth: 500,
-            maxHeight: 500,
-            storageOptions: {
-                skipBackup: true
-            }
-        };
-
-        ImagePicker.showImagePicker(options, (response) => {
-            console.log('Response = ', response);
-
-            if (response.didCancel) {
-                console.log('User cancelled photo picker');
-            }
-            else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            }
-            else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
-            }
-            else {
-                let image = { uri: response.uri }
-                let profile_image = response.path
-
-                this.setState({
-                    photo: image,
-                    profile_image: profile_image
-                });
-
-                let token = this.state.token
-                let userId = this.state.userId
-                const url = REQUEST_URL + HOME_URL + userId + PICTURE;
-                if (token) {
-                    RNFetchBlob.fetch('PUT', url, {
-                        'Accept': 'application/json',
-                        'Content-Type': 'multipart/form-data',
-                        'Authorization': `Bearer ${token}`
-                    }, [
-                            // custom content type
-                            { name: 'media', filename: 'avatar-png.jpg', type: 'image/jpg', data: RNFetchBlob.wrap(this.state.profile_image) }
-                        ])
-                        .then((res) => { return res.json() })
-                        .then((resData) => {
-                            if (resData.error) {
-                                ToastAndroid.showWithGravity(
-                                    resData.error,
-                                    ToastAndroid.LONG,
-                                    ToastAndroid.CENTER
-                                );
-                            }
-                            else {
-                                console.log(resData)
-                                console.log(url)
-                                // console.log('i see a ' + this.state.acct);
-                            }
-                            return resData;
-                        })
-                        .catch(() => {
-                            ToastAndroid.showWithGravity(
-                                'Error update profile picture',
-                                ToastAndroid.SHORT,
-                                ToastAndroid.CENTER
-                            );
-                        }).done
-                }
-                else {
-                    this.props.navigation.navigate('SignIn');
-                }
-            }
-        });
+        this.props.addPhoto
     }
 
 // SET USER PROFILE IN ASYNC STORE
@@ -388,7 +262,8 @@ const mapDispatchToProps = dispatch => {
     return {
         network: (status) => dispatch(isConnected(status)),
         storedProfile: () => dispatch(fetchEditProfile()),
-        newProfileData: (newData) => dispatch(fetchNewProfile(newData))
+        newProfileData: (newData) => dispatch(fetchNewProfile(newData)),
+        addPhoto: () => dispatch(addNewDp())
     }
 }
 

@@ -26,13 +26,12 @@ class Home extends PureComponent {
             headerRight: (
                 <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', margin: 10}}>
                     <MIcon name='bell' size={23} color='black' onPress={()=> alert('Notification')} style={{margin: 4}}/>
-                    <TouchableNativeFeedback onPress={()=> navigation.navigate('EditProfile')}>
+                    <TouchableNativeFeedback onPress={()=> navigation.navigate('MyProfile')}>
                         <CachedImage
                             source={{ uri: params.pic }}
                             style={{ width: 30, height: 30, borderRadius: 5}}
                         />
-                    </TouchableNativeFeedback>
-                    
+                    </TouchableNativeFeedback>    
                 </View>
             ),
             headerLeft: null
@@ -60,19 +59,14 @@ class Home extends PureComponent {
         }
     }
 
-    
     userProfile =  (item) => {
         this.props.viewProfile(item)
     }
-
-
-    
 
     DetailPage = (user) => {
         // this.props.navigation.navigate('DetailPage', {index: user})
         this.props.detailPage(user)
     }
-
 
     onRefresh = () => {
         this.props.homeRequest()

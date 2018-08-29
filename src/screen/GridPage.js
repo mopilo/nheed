@@ -88,10 +88,10 @@ class GridPage extends Component {
     listPost = (item) => {
         // this.props.navigation.navigate('ListPost', {index: item.id, profilePic: this.state.res.profile_picture})
     }
-    onRefresh = () => {
-        this.setState({isLoading: true});
-        this.fetchData()
-    }
+    // onRefresh = () => {
+    //     this.setState({isLoading: true});
+    //     this.fetchData()
+    // }
 
     renderItem = ({ item }) => {
 
@@ -113,12 +113,12 @@ class GridPage extends Component {
                         renderItem={this.renderItem}
                         numColumns={3}
                         keyExtractor={(item, index) => item.id}
-                        refreshControl = {
-                            <RefreshControl
-                                refreshing={this.state.isLoading}
-                                onRefresh={this.onRefresh}
-                            />
-                        }
+                        // refreshControl = {
+                        //     <RefreshControl
+                        //         refreshing={this.state.isLoading}
+                        //         onRefresh={this.onRefresh}
+                        //     />
+                        // }
                     />
                 </View>
         );
@@ -135,9 +135,10 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-      isConnected: state.isConnected.isConnected,
-      data: state.homeReducer.user,
-      pic: state.homeReducer.pic
+        isLoading: state.ui.isLoading,
+        isConnected: state.isConnected.isConnected,
+        data: state.homeReducer.user,
+        pic: state.homeReducer.pic
     };
 };
   

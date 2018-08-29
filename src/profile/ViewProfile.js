@@ -19,9 +19,9 @@ import { TabNavigator } from 'react-navigation';
 import { Card, CardItem, Thumbnail, Body, Left, Right, Button, Container, Tabs, Tab, TabHeading } from 'native-base';
 import { REQUEST_URL, HOME_URL, MY_POST, HOME_POST } from '../../component/Utility/local';
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-// import TabThree from '../MyProfileTabs/TabThree';
-// import TabTwo from '../MyProfileTabs/TabTwo';
-// import TabOne from '../MyProfileTabs/TabOne';
+import TabThree from './profileTabs/TabThree';
+import TabTwo from './profileTabs/TabTwo';
+import TabOne from './profileTabs/TabOne';
 
 import { CachedImage } from 'react-native-cached-image';
 
@@ -162,7 +162,7 @@ class ViewProfile extends Component {
     //     }
     // }
 
-    // onChangeTab() {
+    onChangeTab() {
     //     AsyncStorage.multiGet(['token', 'userId']).then(stores => {
     //         const token = stores[0][1];
     //         const userId = stores[1][1];
@@ -196,7 +196,7 @@ class ViewProfile extends Component {
     //                 console.log('error')
     //             })
     //     })
-    // }
+    }
 
     render() {
         let view = this.props.viewData
@@ -237,8 +237,47 @@ class ViewProfile extends Component {
                                     <Text style={{ textAlign: 'center', color: '#000' }}> {this.state.nheed} </Text>
                                 </TouchableOpacity>
                             </View>
+                        </View> 
 
-                        </View>                        
+                        {/*        *****************          BEGINNING OF TABS     ****************                */}
+                        
+                        <Tabs initialPage={0} tabBarUnderlineStyle={{ backgroundColor: 'transparent' }} locked={true} onChangeTab={({ i }) => { this.setState({ page: i }), this.onChangeTab }} style={{ margin: 10 }}>
+
+                            {/* FIRST TAB HEADING */}
+                            <Tab heading={<TabHeading style={this.state.page === 0 ? styles.activeTabStyle : styles.tabStyle}>
+                                <MIcon name="play-box-outline" size={33} color={this.state.page === 0 ? '#000' : 'grey'} />
+                                {/* <Image source={require('../../assets/tv.png')} style={{height: 25, width: 25}}/> */}
+                                <View style={{ padding: 5, alignItems: 'flex-start' }}>
+                                    <Text style={this.state.page === 0 ? styles.activeTextStyle : styles.textStyle}>{this.state.totalVideos}</Text>
+                                    <Text style={this.state.page === 0 ? styles.activeTextStyle : styles.textStyle}>{this.state.totalVideos > 1 ? 'videos' : 'video'}</Text>
+                                </View>
+                            </TabHeading>}>
+                                <TabOne/>
+                            </Tab>
+
+                            {/* SECOND TAB HEADING */}
+                            <Tab heading={<TabHeading style={this.state.page === 1 ? styles.activeTabStyle : styles.tabStyle}>
+                                <Icon name="image" size={30} color={this.state.page === 1 ? '#000' : 'grey'} />
+                                <View style={{ padding: 5, alignItems: 'flex-start' }}>
+                                    <Text style={this.state.page === 1 ? styles.activeTextStyle : styles.textStyle}>{this.state.totalImages}</Text>
+                                    <Text style={this.state.page === 1 ? styles.activeTextStyle : styles.textStyle}>{this.state.totalImages > 1 ? 'images' : 'image'}</Text>
+                                </View>
+                            </TabHeading>}>
+                                <TabTwo/>
+                            </Tab>
+
+                            {/* THIRD TAB HEADING */}
+                            <Tab heading={<TabHeading style={this.state.page === 2 ? styles.activeTabStyle : styles.tabStyle}>
+                                <View style={{ padding: 5, alignItems: 'center' }}>
+                                    <Text style={this.state.page === 2 ? styles.activeTextStyle : styles.textStyle}>{this.state.totalMedia}</Text>
+                                    <Text style={this.state.page === 2 ? styles.activeTextStyle : styles.textStyle}>{this.state.totalMedia > 1 ? 'Total clips' : 'Total clip'}</Text>
+                                </View>
+                            </TabHeading>}>
+                                <TabThree/>
+                            </Tab>
+
+                            {/* END OF TABS */}
+                        </Tabs>                       
                     </ScrollView>
                 </Container>
         );

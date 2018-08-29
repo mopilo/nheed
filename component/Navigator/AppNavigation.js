@@ -13,6 +13,8 @@ import Home from '../../src/tabs/Home'
 import EditProfile from '../../src/profile/EditProfile'
 import GridPage from '../../src/screen/GridPage'
 import ViewProfile from '../../src/profile/ViewProfile'
+import MyProfile from '../../src/profile/MyProfile'
+
 
 export const AppNavigator = createStackNavigator({
     SignIn:{
@@ -23,7 +25,8 @@ export const AppNavigator = createStackNavigator({
     Home: {screen: Home},
     EditProfile: { screen: EditProfile },
     GridPage: {screen: GridPage},
-    ViewProfile: {screen: ViewProfile}
+    ViewProfile: {screen: ViewProfile},
+    MyProfile: {screen: MyProfile}
     },
   );
 

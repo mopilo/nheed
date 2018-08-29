@@ -1,8 +1,10 @@
 import {uiStartLoading, uiStopLoading} from './ui'
-import {FETCH_EDIT_PROFILE} from './actionType'
-import {REQUEST_URL, HOME_URL} from '../../component/Utility/local'
+import {FETCH_EDIT_PROFILE, ADD_PHOTO} from './actionType'
+import {REQUEST_URL, HOME_URL, PICTURE} from '../../component/Utility/local'
 import{ToastAndroid} from 'react-native'
 import { NavigationActions } from 'react-navigation';
+import RNFetchBlob from 'react-native-fetch-blob';
+import ImagePicker from 'react-native-image-picker'
 
 
 
@@ -66,8 +68,10 @@ export const editAsync = (item) => {
 
 
 export const fetchNewProfile = (newData) => (dispatch, getState) => {
+    const {isConnected} = getState().isConnected
     const {token} = getState().authReducer;
     const {userId} = getState().authReducer
+    
     const url = REQUEST_URL + HOME_URL + userId;
 
 
@@ -124,5 +128,87 @@ export const fetchNewProfile = (newData) => (dispatch, getState) => {
                 ToastAndroid.CENTER
             );        
         })
+    }
+}
+
+export const addNewDp = () => (dispatch, getState) => {
+    const {isConnected} = getState().isConnected
+    const {token} = getState().authReducer;
+    const {userId} = getState().authReducer
+
+    const options = {
+        title: 'Select Image',
+        quality: 1.0,
+        maxWidth: 500,
+        maxHeight: 500,
+        storageOptions: {
+            skipBackup: true
+        }
+    };
+
+    ImagePicker.showImagePicker(options, (response) => {
+        console.log('Response = ', response);
+
+        if (response.didCancel) {
+            console.log('User cancelled photo picker');
+        }
+        else if (response.error) {
+            console.log('ImagePicker Error: ', response.error);
+        }
+        else if (response.customButton) {
+            console.log('User tapped custom button: ', response.customButton);
+        }
+        else {
+            let image = { uri: response.uri }
+            let profile_image = response.path
+            dispatch(
+                profileDp(
+                    image,
+                    profile_image
+                )
+            )
+
+            const url = REQUEST_URL + HOME_URL + userId + PICTURE;
+            if (token) {
+                RNFetchBlob.fetch('PUT', url, {
+                    'Accept': 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}`
+                }, 
+                [
+                    // custom content type
+                    { name: 'media', filename: 'avatar-png.jpg', type: 'image/jpg', data: RNFetchBlob.wrap(profile_image) }
+                ])
+                .then((res) => { return res.json() })
+                .then((resData) => {
+                    if (resData.error) {
+                        ToastAndroid.showWithGravity(
+                            resData.error,
+                            ToastAndroid.LONG,
+                            ToastAndroid.CENTER
+                        );
+                    }
+                    else {
+                        console.log(resData)
+                    }
+                    return resData;
+                })
+                .catch(() => {
+                    ToastAndroid.showWithGravity(
+                        'Error update profile picture',
+                        ToastAndroid.SHORT,
+                        ToastAndroid.CENTER
+                    );
+                })
+            }
+        }
+    });
+}
+
+export const profileDp = (pic, dp) => {
+    return{
+        type: ADD_PHOTO,
+        pic: pic,
+        dp:dp
     }
 }
