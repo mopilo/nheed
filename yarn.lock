@@ -4336,6 +4336,10 @@ react-native-cached-image@^1.4.3:
     react-native-fetch-blob "0.10.8"
     url-parse "1.1.9"
 
+react-native-camera-roll-picker@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/react-native-camera-roll-picker/-/react-native-camera-roll-picker-1.2.3.tgz#b117fd3a2b9012dcccee1261a9bc427226b8d6d2"
+
 react-native-clcasher@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-clcasher/-/react-native-clcasher-1.0.0.tgz#1f77fb1a4abc6a0337ef19c991e04f19af6d2789"
@@ -4370,6 +4374,10 @@ react-native-fetch-blob@0.10.8:
   dependencies:
     base-64 "0.1.0"
     glob "7.0.6"
+
+react-native-image-crop-picker@^0.21.1:
+  version "0.21.1"
+  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.21.1.tgz#0903b11644e88cca3d178e3a16b451a310969b8b"
 
 react-native-image-picker@^0.26.10:
   version "0.26.10"

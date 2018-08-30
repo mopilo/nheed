@@ -29,6 +29,7 @@ import MyProfile from '../../src/profile/MyProfile'
 import Icon from 'react-native-vector-icons/Feather';
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 
+//stack for home
   const HomeTabNav = createStackNavigator({
     Home: {screen: Home},
     EditProfile: { screen: EditProfile },

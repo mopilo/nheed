@@ -26,24 +26,18 @@ class GridPage extends Component {
     static navigationOptions = ({ navigation, transitioning }) => {
         const params = navigation.state.params || {};
         return{
-            headerLeft:
-            (
-                <TouchableOpacity disabled={transitioning} onPress={() => { navigation.navigate('MyProfile') }}>
-                    <View style={{ width: 40, height: 40, padding: 10, margin: 4, alignItems: 'center', justifyContent: 'center', alignContent: 'center' }}>
-                        <CachedImage
-                            source={{ uri: params.pic }}
-                            style={{ width: 30, height: 30, borderRadius: 5}}
-                        />
-                    </View>
-
-                </TouchableOpacity>
-                
-            ),
+            
             headerRight: (
                 <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                     <Icon name= 'search' size={23} color='#000000' style={{margin: 10}} onPress={()=>{navigation.navigate('Search')}}/>
                     {/* <Icon name= 'more-vertical' size={23} style={{margin: 10}} onPress={()=>{navigation.navigate('PlayTab')}}/> */}
                     <MIcon name='dots-vertical' size={23} color='black' onPress={()=> alert('Notification')} style={{margin: 4}}/>
+                    <TouchableOpacity onPress={() => { navigation.navigate('MyProfile') }}>
+                        <CachedImage
+                            source={{ uri: params.pic }}
+                            style={{ width: 30, height: 30, borderRadius: 5}}
+                        />
+                    </TouchableOpacity>
                 </View>
             )
         }

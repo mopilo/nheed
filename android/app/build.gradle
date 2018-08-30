@@ -99,6 +99,7 @@ android {
 
     defaultConfig {
         applicationId "com.nheed"
+        vectorDrawables.useSupportLibrary = true
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -137,6 +138,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-image-crop-picker')
     compile project(':react-native-video')
     compile project(':react-native-image-picker')
     compile project(':rn-fetch-blob')

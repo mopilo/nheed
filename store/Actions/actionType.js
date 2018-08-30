@@ -17,5 +17,6 @@ export const GRID_POST = 'GRID_POST'
 
 export const FETCH_EDIT_PROFILE = 'FETCH_EDIT_PROFILE'
 export const ADD_PHOTO = 'ADD_PHOTO'
+export const EXPLORED = 'EXPLORED'
 
 export{login, register, otp};

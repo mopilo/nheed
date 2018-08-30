@@ -6,7 +6,7 @@ import { NavigationActions } from 'react-navigation';
 
 
 export const fetchHomeRequest = () => (dispatch, getState) => {
-    const { userId, token} = getState().authReducer;
+    const { userId, token} = getState().AuthReducer;
     const {isConnected} = getState().isConnected
 
     
@@ -67,7 +67,7 @@ export const setAsync = (data) => {
 }
 
 export const fetchProfile = () => (dispatch, getState) => {
-    const {userId, token} = getState().authReducer;
+    const {userId, token} = getState().AuthReducer;
     const url = REQUEST_URL + HOME_URL + userId;
 
     if(token){
@@ -107,7 +107,7 @@ export const profileAsync = (profile, pic) => {
 }
 
 export const fetchMyProfile = (item) => (dispatch, getState) => {
-    const {token} = getState().authReducer;
+    const {token} = getState().AuthReducer;
     const url = REQUEST_URL + HOME_URL + item;
     if(token){
         fetch(url, {
@@ -147,7 +147,7 @@ export const userAsync = (item, phone) => {
 }
 
 export const fetchPostDetails = (user) => (dispatch, getState) => {
-    const {token} = getState().authReducer;
+    const {token} = getState().AuthReducer;
     const url = REQUEST_URL + HOME_URL + user + HOME_POST;
     if(token){
         fetch(url, {
