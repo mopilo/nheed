@@ -43,6 +43,11 @@ class GridPage extends Component {
         }
     };
 
+    componentDidMount = () => {
+        this.props.navigation.setParams({ 'pic': this.props.pic });
+    }
+    
+
     formatData = (data, numColumns) => {
         const numberOfFullRows = Math.floor(data.length / numColumns);
         let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
@@ -53,12 +58,6 @@ class GridPage extends Component {
         return data;
     };
 
-    componentWillReceiveProps(nextProps) {
-        if ( nextProps.pic != this.props.pic) {
-            this.props.navigation.setParams({ 'pic': nextProps.pic });
-            console.log(nextProps.pic)
-        }
-    }
 
     // this methods holds both images and videos
     renderElement = (item) => {
