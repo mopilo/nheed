@@ -271,7 +271,7 @@ const mapStateToProps = state => {
     return {
       isLoading: state.ui.isLoading,
       isConnected: state.isConnected.isConnected,
-      loggedIn: state.AuthReducer.loggedIn
+      loggedIn: state.authReducer.loggedIn
     };
 };
   

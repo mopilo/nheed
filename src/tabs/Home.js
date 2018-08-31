@@ -55,7 +55,6 @@ class Home extends PureComponent {
     componentWillReceiveProps(nextProps) {
         if ( nextProps.pic != this.props.pic) {
             this.props.navigation.setParams({ 'pic': nextProps.pic });
-            console.log(nextProps.pic)
         }
     }
 
@@ -66,6 +65,7 @@ class Home extends PureComponent {
     DetailPage = (user) => {
         // this.props.navigation.navigate('DetailPage', {index: user})
         this.props.detailPage(user)
+        console.log(user)
     }
 
     onRefresh = () => {
@@ -80,18 +80,18 @@ class Home extends PureComponent {
             <View style={{marginBottom: 5, borderBottomWidth: 0.5, padding: 10, borderBottomColor: '#d3d3d3'}}>
                 <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', alignContent: 'center'}}>
                     <View style={{flex: 0.8, margin: 10}}>
-                        <TouchableOpacity onPress={this.userProfile.bind(this, item.account.id)}>
-                            <Thumbnail square source={{ uri: item.account.profile_picture }} style={{ height: 30, width: 30, borderRadius: 5 }} />
+                        <TouchableOpacity onPress={this.userProfile.bind(this, item.account_id)}>
+                            <Thumbnail square source={{ uri: item.profile_picture }} style={{ height: 30, width: 30, borderRadius: 5 }} />
                         </TouchableOpacity>
                     </View>
                     <View style={{flex: 4}}>
-                        <Text note style={{ fontSize: 12, fontFamily: 'Lato-Bold', color: '#000' }}>{item.account.name}</Text>
+                        <Text note style={{ fontSize: 12, fontFamily: 'Lato-Bold', color: '#000' }}>{item.account_name}</Text>
                     </View>
 
                     <View style={{flex: 0.5, alignItems: 'center', justifyContent: 'center', margin: 4}}>
-                            <TouchableNativeFeedback onPress={()=> this.DetailPage(item.account.id)}>
-                                <View style={{borderRadius: 50, height: 50, width: 50, borderColor: '#000', borderWidth: 1, alignItems: 'center', justifyContent: 'center', marginRight: 8}}>
-                                    <Text style={{fontFamily: 'Lato-Regular', fontSize: 14, alignSelf: 'center'}}>0</Text>
+                            <TouchableNativeFeedback onPress={()=> this.DetailPage(item.account_id)}>
+                                <View style={{borderRadius: 50, height: 40, width: 40, borderColor: '#000', borderWidth: 1, alignItems: 'center', justifyContent: 'center', marginRight: 8}}>
+                                    <Text style={{fontFamily: 'Lato-Regular', fontSize: 14, alignSelf: 'center'}}>{item.post_count}</Text>
                                 </View>
                             </TouchableNativeFeedback>
                     </View>
@@ -104,6 +104,7 @@ class Home extends PureComponent {
     }
 
     render() {
+        console.log('testing',this.props.data)
         return (
             this.props.isLoading ?
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -114,7 +115,7 @@ class Home extends PureComponent {
                 <FlatList
                     data={this.props.data}
                     renderItem={this.renderItem}
-                    keyExtractor={(item, index) => item.id.toString()}
+                    keyExtractor={(item, index) => item.user_id.toString()}
                     // extraData={this.state}
                     refreshControl = {
                         <RefreshControl

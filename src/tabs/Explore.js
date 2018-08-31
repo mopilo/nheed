@@ -86,6 +86,7 @@ class Explore extends Component {
         // this.requestStoragePermission()
         NetInfo.isConnected.addEventListener('connectionChange', this._handleConnectionChange);
         this.props.explorePage()
+        this.props.navigation.setParams({ 'pic': this.props.pic });
     }
 
 
@@ -93,12 +94,6 @@ class Explore extends Component {
         NetInfo.isConnected.removeEventListener('connectionChange', this._handleConnectionChange);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if ( nextProps.pic != this.props.pic) {
-            this.props.navigation.setParams({ 'pic': nextProps.pic });
-            console.log(nextProps.pic)
-        }
-    }
 
     // for network check
     _handleConnectionChange = (isConnected) => {

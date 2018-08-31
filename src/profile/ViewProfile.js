@@ -68,7 +68,7 @@ class ViewProfile extends Component {
             totalMedia: 0,
             phone: null
         }
-        // this.onChangeTab = this.onChangeTab.bind(this)
+        this.onChangeTab = this.onChangeTab.bind(this)
     }
 
 
@@ -76,8 +76,8 @@ class ViewProfile extends Component {
     componentDidMount() {
         NetInfo.isConnected.addEventListener('connectionChange', this._handleConnectionChange);
         // this.phone()
+        this.onChangeTab()
     }
-
 
     componentWillUnmount() {
         NetInfo.isConnected.removeEventListener('connectionChange', this._handleConnectionChange);
@@ -163,123 +163,122 @@ class ViewProfile extends Component {
     // }
 
     onChangeTab() {
-    //     AsyncStorage.multiGet(['token', 'userId']).then(stores => {
-    //         const token = stores[0][1];
-    //         const userId = stores[1][1];
-    //         const url = REQUEST_URL + HOME_URL + this.state.acctId + HOME_POST
-    //         fetch(url, {
-    //             headers: {
-    //                 'content-type': 'application/json',
-    //                 'Accept': 'application/json',
-    //                 'Authorization': `Bearer ${token}`
-    //             }
-    //         })
-    //             .then((res) => { return res.json() })
-    //             .then((resData) => {
-    //                 const play = resData.data;
-    //                 const videoResult = play.filter(media => media.post_type === 'video');
-    //                 const imageResult = play.filter(media => media.post_type === 'image');
-    //                 this.setState({
-    //                     totalPost: resData.data,
-    //                     isloading: false,
-    //                     totalMedia: Object.keys(resData.data).length,
-    //                     totalVideos: Object.keys(videoResult).length,
-    //                     totalImages: Object.keys(imageResult).length,
-    //                     videoResult: videoResult,
-    //                     imageResult: imageResult
-    //                 })
-    //                 console.log("wanna see some ", videoResult)
-    //                 return resData
-    //             })
-    //             .catch(() => {
-    //                 this.setState({ isloading: false })
-    //                 console.log('error')
-    //             })
-    //     })
+        
+        const token =this.props.token
+        const userId = this.props.viewData.id
+        const url = REQUEST_URL + HOME_URL + userId + HOME_POST
+        fetch(url, {
+            headers: {
+                'content-type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then((res) => { return res.json() })
+            .then((resData) => {
+                const play = resData.data;
+                const videoResult = play.filter(media => media.post_type === 'video');
+                const imageResult = play.filter(media => media.post_type === 'image');
+                this.setState({
+                    totalPost: resData.data,
+                    isloading: false,
+                    totalMedia: Object.keys(resData.data).length,
+                    totalVideos: Object.keys(videoResult).length,
+                    totalImages: Object.keys(imageResult).length,
+                    videoResult: videoResult,
+                    imageResult: imageResult
+                })
+                // console.log(this.state.totalPost)
+                return resData
+            })
+            .catch(() => {
+                this.setState({ isloading: false })
+                console.log('error')
+            })
     }
 
     render() {
         let view = this.props.viewData
         return (
-                <Container>
-                    <ScrollView style={{ flex: 1, backgroundColor: '#fff', alignContent: 'center' }}>
+            <Container>
+                <ScrollView style={{ flex: 1, backgroundColor: '#fff', alignContent: 'center' }}>
 
-                        <View style={styles.container}>
-                            <View style={styles.topProfile}>
-                                <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
-                                    <Text style={{ fontSize: 24, color: '#000' }}>{view.following}</Text>
-                                    <Text note style={{ fontSize: 12, color: '#000' }}>{view.following > 1 ? 'Nheeders' : 'Nheeder'}</Text>
+                    <View style={styles.container}>
+                        <View style={styles.topProfile}>
+                            <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
+                                <Text style={{ fontSize: 24, color: '#000' }}>{view.following}</Text>
+                                <Text note style={{ fontSize: 12, color: '#000' }}>{view.following > 1 ? 'Nheeders' : 'Nheeder'}</Text>
+                            </View>
+                            {/* PROFILE IMAGE */}
+                            <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                                <View style={{ width: 100, height: 100, padding: 25, borderWidth: 2, borderColor: '#251b33', justifyContent: 'center', alignItems: 'center' }}>
+                                    <CachedImage source={{ uri: view.profile_picture }}
+                                        style={{ width: 95, height: 95}} resizeMode = 'cover'/>
                                 </View>
-                                {/* PROFILE IMAGE */}
-                                <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                                    <View style={{ width: 100, height: 100, padding: 25, borderWidth: 2, borderColor: '#251b33', justifyContent: 'center', alignItems: 'center' }}>
-                                        <CachedImage source={{ uri: view.profile_picture }}
-                                            style={{ width: 95, height: 95}} resizeMode = 'cover'/>
-                                    </View>
-                                    <Text style={{ fontSize: 12, textAlign: 'center', color: '#000' }}>{view.name}</Text>
-
-                                </View>
-                                <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
-                                    <Text style={{ fontSize: 14, color: '#000' }}>Comedian</Text>
-                                    <Text note style={{ fontSize: 9, color: '#000' }}>Tech. Entreprenuer</Text>
-                                    <Text note style={{ fontSize: 9, color: '#000' }}>Co-founder Reimnet</Text>
-                                </View>
+                                <Text style={{ fontSize: 12, textAlign: 'center', color: '#000' }}>{view.name}</Text>
 
                             </View>
-
-                            <View style={{ flex: 1, justifyContent: 'center' }}>
-                                <Text note style={{ fontSize: 12, textAlign: 'center', color: '#000' }}>{view.bio}</Text>
-                                <Text note style={{ fontSize: 12, textAlign: 'center', color: '#000' }}>http://</Text>
+                            <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
+                                <Text style={{ fontSize: 14, color: '#000' }}>Comedian</Text>
+                                <Text note style={{ fontSize: 9, color: '#000' }}>Tech. Entreprenuer</Text>
+                                <Text note style={{ fontSize: 9, color: '#000' }}>Co-founder Reimnet</Text>
                             </View>
 
-                            <View style={{ flex: 1 }}>
-                                <TouchableOpacity onPress={this.Nheed} style={styles.nheed}>
-                                    <Text style={{ textAlign: 'center', color: '#000' }}> {this.state.nheed} </Text>
-                                </TouchableOpacity>
+                        </View>
+
+                        <View style={{ flex: 1, justifyContent: 'center' }}>
+                            <Text note style={{ fontSize: 12, textAlign: 'center', color: '#000' }}>{view.bio}</Text>
+                            <Text note style={{ fontSize: 12, textAlign: 'center', color: '#000' }}>{view.url ? view.url : ''}</Text>
+                        </View>
+
+                        <View style={{ flex: 1 }}>
+                            <TouchableOpacity onPress={this.Nheed} style={styles.nheed}>
+                                <Text style={{ textAlign: 'center', color: '#000' }}> {this.state.nheed} </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View> 
+
+                    {/*        *****************          BEGINNING OF TABS     ****************                */}
+                    
+                    <Tabs initialPage={0} tabBarUnderlineStyle={{ backgroundColor: 'transparent' }} locked={true} onChangeTab={({ i }) => { this.setState({ page: i }), this.onChangeTab }} style={{ margin: 10 }}>
+
+                        {/* FIRST TAB HEADING */}
+                        <Tab heading={<TabHeading style={this.state.page === 0 ? styles.activeTabStyle : styles.tabStyle}>
+                            <MIcon name="play-box-outline" size={33} color={this.state.page === 0 ? '#000' : 'grey'} />
+                            {/* <Image source={require('../../assets/tv.png')} style={{height: 25, width: 25}}/> */}
+                            <View style={{ padding: 5, alignItems: 'flex-start' }}>
+                                <Text style={this.state.page === 0 ? styles.activeTextStyle : styles.textStyle}>{this.state.totalVideos}</Text>
+                                <Text style={this.state.page === 0 ? styles.activeTextStyle : styles.textStyle}>{this.state.totalVideos > 1 ? 'videos' : 'video'}</Text>
                             </View>
-                        </View> 
+                        </TabHeading>}>
+                            <TabOne totalPost={this.state.videoResult} isloading={this.state.isloading} video={this.state.totalVideos} />
+                        </Tab>
 
-                        {/*        *****************          BEGINNING OF TABS     ****************                */}
-                        
-                        <Tabs initialPage={0} tabBarUnderlineStyle={{ backgroundColor: 'transparent' }} locked={true} onChangeTab={({ i }) => { this.setState({ page: i }), this.onChangeTab }} style={{ margin: 10 }}>
+                        {/* SECOND TAB HEADING */}
+                        <Tab heading={<TabHeading style={this.state.page === 1 ? styles.activeTabStyle : styles.tabStyle}>
+                            <Icon name="image" size={30} color={this.state.page === 1 ? '#000' : 'grey'} />
+                            <View style={{ padding: 5, alignItems: 'flex-start' }}>
+                                <Text style={this.state.page === 1 ? styles.activeTextStyle : styles.textStyle}>{this.state.totalImages}</Text>
+                                <Text style={this.state.page === 1 ? styles.activeTextStyle : styles.textStyle}>{this.state.totalImages > 1 ? 'images' : 'image'}</Text>
+                            </View>
+                        </TabHeading>}>
+                            <TabTwo totalPost={this.state.imageResult} isloading={this.state.isloading} />
+                        </Tab>
 
-                            {/* FIRST TAB HEADING */}
-                            <Tab heading={<TabHeading style={this.state.page === 0 ? styles.activeTabStyle : styles.tabStyle}>
-                                <MIcon name="play-box-outline" size={33} color={this.state.page === 0 ? '#000' : 'grey'} />
-                                {/* <Image source={require('../../assets/tv.png')} style={{height: 25, width: 25}}/> */}
-                                <View style={{ padding: 5, alignItems: 'flex-start' }}>
-                                    <Text style={this.state.page === 0 ? styles.activeTextStyle : styles.textStyle}>{this.state.totalVideos}</Text>
-                                    <Text style={this.state.page === 0 ? styles.activeTextStyle : styles.textStyle}>{this.state.totalVideos > 1 ? 'videos' : 'video'}</Text>
-                                </View>
-                            </TabHeading>}>
-                                <TabOne/>
-                            </Tab>
+                        {/* THIRD TAB HEADING */}
+                        <Tab heading={<TabHeading style={this.state.page === 2 ? styles.activeTabStyle : styles.tabStyle}>
+                            <View style={{ padding: 5, alignItems: 'center' }}>
+                                <Text style={this.state.page === 2 ? styles.activeTextStyle : styles.textStyle}>{this.state.totalMedia}</Text>
+                                <Text style={this.state.page === 2 ? styles.activeTextStyle : styles.textStyle}>{this.state.totalMedia > 1 ? 'Total clips' : 'Total clip'}</Text>
+                            </View>
+                        </TabHeading>}>
+                            <TabThree totalPost={this.state.totalPost} isloading={this.state.isloading} />
+                        </Tab>
 
-                            {/* SECOND TAB HEADING */}
-                            <Tab heading={<TabHeading style={this.state.page === 1 ? styles.activeTabStyle : styles.tabStyle}>
-                                <Icon name="image" size={30} color={this.state.page === 1 ? '#000' : 'grey'} />
-                                <View style={{ padding: 5, alignItems: 'flex-start' }}>
-                                    <Text style={this.state.page === 1 ? styles.activeTextStyle : styles.textStyle}>{this.state.totalImages}</Text>
-                                    <Text style={this.state.page === 1 ? styles.activeTextStyle : styles.textStyle}>{this.state.totalImages > 1 ? 'images' : 'image'}</Text>
-                                </View>
-                            </TabHeading>}>
-                                <TabTwo/>
-                            </Tab>
-
-                            {/* THIRD TAB HEADING */}
-                            <Tab heading={<TabHeading style={this.state.page === 2 ? styles.activeTabStyle : styles.tabStyle}>
-                                <View style={{ padding: 5, alignItems: 'center' }}>
-                                    <Text style={this.state.page === 2 ? styles.activeTextStyle : styles.textStyle}>{this.state.totalMedia}</Text>
-                                    <Text style={this.state.page === 2 ? styles.activeTextStyle : styles.textStyle}>{this.state.totalMedia > 1 ? 'Total clips' : 'Total clip'}</Text>
-                                </View>
-                            </TabHeading>}>
-                                <TabThree/>
-                            </Tab>
-
-                            {/* END OF TABS */}
-                        </Tabs>                       
-                    </ScrollView>
-                </Container>
+                        {/* END OF TABS */}
+                    </Tabs>                       
+                </ScrollView>
+            </Container>
         );
     }
 }
@@ -346,10 +345,12 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-      isLoading: state.ui.isLoading,
-      isConnected: state.isConnected.isConnected,
-      viewData: state.homeReducer.idData,
-      phone: state.homeReducer.phone
+        isLoading: state.ui.isLoading,
+        isConnected: state.isConnected.isConnected,
+        viewData: state.homeReducer.idData,
+        phone: state.homeReducer.phone,
+        token: state.authReducer.token,
+        // userId: state.homeReducer.viewUserId
     };
 };
   

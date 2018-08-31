@@ -6,7 +6,8 @@ const initialState = {
   pic: '',
   idData: '',
   user: '',
-  phone: ''
+  phone: '',
+  viewUserId: ''
   // error: undefined
 };
 
@@ -27,7 +28,8 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         idData: action.user,
-        phone: action.phone
+        phone: action.phone,
+        viewUserId: action.viewUserId
       };
     case GRID_POST:
       return {

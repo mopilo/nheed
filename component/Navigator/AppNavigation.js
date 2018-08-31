@@ -19,6 +19,8 @@ import Explore from '../../src/tabs/Explore'
 
 //other screens
 import GridPage from '../../src/screen/GridPage'
+import Search from '../../src/screen/Search'
+import ImagePost from '../../src/screen/cameraPost/ImagePost'
 
 //profile
 import EditProfile from '../../src/profile/EditProfile'
@@ -29,22 +31,29 @@ import MyProfile from '../../src/profile/MyProfile'
 import Icon from 'react-native-vector-icons/Feather';
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 
+
+
 //stack for home
   const HomeTabNav = createStackNavigator({
     Home: {screen: Home},
     EditProfile: { screen: EditProfile },
     GridPage: {screen: GridPage},
     ViewProfile: {screen: ViewProfile},
-    MyProfile: {screen: MyProfile}
+    MyProfile: {screen: MyProfile}, 
+    Search: {screen: Search}
   },{
     initialRouteName: 'Home',
   })
 
   const UploadTabNav = createStackNavigator({
-    Upload: {screen: Upload}
+    Upload: {screen: Upload},
+    ImagePost: {screen: ImagePost}
   })
   const ExploreTabNav = createStackNavigator({
-    Explore: {screen: Explore}
+    Explore: {screen: Explore},
+    Search: {screen: Search},
+    MyProfile: {screen: MyProfile} 
+
   })
 
   const AppTab = createBottomTabNavigator({
@@ -55,7 +64,7 @@ import MIcon from 'react-native-vector-icons/MaterialCommunityIcons'
       screen: UploadTabNav
     },
     ExploreTab: {
-      screen: ExploreTabNav
+      screen: ExploreTabNav,
     },
   },{
     navigationOptions: ({ navigation }) => ({

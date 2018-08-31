@@ -6,8 +6,8 @@ import { NavigationActions } from 'react-navigation';
 
 
 export const fetchExplore = () => (dispatch, getState) => {
-    const {token} = getState().AuthReducer
-    const {userId} = getState().AuthReducer
+    const {token} = getState().authReducer
+    const {userId} = getState().authReducer
     const {isConnected} = getState().isConnected 
 
     const url = REQUEST_URL + HOME_URL + userId + EXPLORE;

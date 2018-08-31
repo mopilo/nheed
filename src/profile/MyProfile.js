@@ -17,6 +17,7 @@ import {connect} from 'react-redux';
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { CachedImage } from 'react-native-cached-image';
 import {fetchEditProfile} from '../../store/Actions/index'
+import {REQUEST_URL, HOME_POST, HOME_URL} from '../../component/Utility/local'
 
 //Tabs
 import TabThree from './profileTabs/TabThree';
@@ -46,12 +47,13 @@ class MyProfile extends Component {
             page: 0,
             isloading: false
         }
-        // this.onChangeTab = this.onChangeTab.bind(this)
+        this.onChangeTab = this.onChangeTab.bind(this)
     }
 
     // a lifeCycle component used to render data before screen loads
     componentDidMount() {
         NetInfo.isConnected.addEventListener('connectionChange', this._handleConnectionChange);
+        this.onChangeTab()
     }
 
     componentWillUnmount() {
@@ -69,39 +71,37 @@ class MyProfile extends Component {
 
     onChangeTab() {
         
-    //     AsyncStorage.multiGet(['token', 'userId']).then(stores => {
-    //         const token = stores[0][1];
-    //         const userId = stores[1][1];
-    //         const url = REQUEST_URL + HOME_URL + userId + HOME_POST
-    //         fetch(url, {
-    //             headers: {
-    //                 'content-type': 'application/json',
-    //                 'Accept': 'application/json',
-    //                 'Authorization': `Bearer ${token}`
-    //             }
-    //         })
-    //             .then((res) => { return res.json() })
-    //             .then((resData) => {
-    //                 const play = resData.data;
-    //                 const videoResult = play.filter(media => media.post_type === 'video');
-    //                 const imageResult = play.filter(media => media.post_type === 'image');
-    //                 this.setState({
-    //                     totalPost: resData.data,
-    //                     isloading: false,
-    //                     totalMedia: Object.keys(resData.data).length,
-    //                     totalVideos: Object.keys(videoResult).length,
-    //                     totalImages: Object.keys(imageResult).length,
-    //                     videoResult: videoResult,
-    //                     imageResult: imageResult
-    //                 })
-    //                 // console.log(this.state.totalPost)
-    //                 return resData
-    //             })
-    //             .catch(() => {
-    //                 this.setState({ isloading: false })
-    //                 console.log('error')
-    //             })
-    //     })
+        const token =this.props.token
+        const userId = this.props.userId
+        const url = REQUEST_URL + HOME_URL + userId + HOME_POST
+        fetch(url, {
+            headers: {
+                'content-type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then((res) => { return res.json() })
+            .then((resData) => {
+                const play = resData.data;
+                const videoResult = play.filter(media => media.post_type === 'video');
+                const imageResult = play.filter(media => media.post_type === 'image');
+                this.setState({
+                    totalPost: resData.data,
+                    isloading: false,
+                    totalMedia: Object.keys(resData.data).length,
+                    totalVideos: Object.keys(videoResult).length,
+                    totalImages: Object.keys(imageResult).length,
+                    videoResult: videoResult,
+                    imageResult: imageResult
+                })
+                // console.log(this.state.totalPost)
+                return resData
+            })
+            .catch(() => {
+                this.setState({ isloading: false })
+                console.log('error')
+            })
     }
 
     render() {
@@ -126,7 +126,6 @@ class MyProfile extends Component {
                                         style={{ width: 95, height: 95}} />
                                 </View>
                                 <Text style={{ fontSize: 12, textAlign: 'center', color: '#000' }}>{myProfile.name}</Text>
-
                             </View>
                             <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
                                 <Text style={{ fontSize: 25, fontFamily: 'Lato-Bold', color: '#000' }}>{nheeds}</Text>
@@ -142,7 +141,6 @@ class MyProfile extends Component {
 
                         <View style={{ flex: 1 }}>
                             <TouchableOpacity onPress={this.editProfile} style={styles.editProfileBtn}>
-                
                                 <Text style={{ textAlign: 'center', fontFamily: 'Lato-Bold', color: '#000' }}> Edit Profile </Text>
                             </TouchableOpacity>
                         </View>
@@ -160,7 +158,7 @@ class MyProfile extends Component {
                                 <Text style={this.state.page === 0 ? styles.activeTextStyle : styles.textStyle}>{this.state.totalVideos > 1 ? 'videos' : 'video'}</Text>
                             </View>
                         </TabHeading>}>
-                            <TabOne/>
+                            <TabOne totalPost={this.state.videoResult} isloading={this.state.isloading} video={this.state.totalVideos} />
                         </Tab>
 
                         {/* SECOND TAB HEADING */}
@@ -171,7 +169,7 @@ class MyProfile extends Component {
                                 <Text style={this.state.page === 1 ? styles.activeTextStyle : styles.textStyle}>{this.state.totalImages > 1 ? 'images' : 'image'}</Text>
                             </View>
                         </TabHeading>}>
-                            <TabTwo/>
+                            <TabTwo totalPost={this.state.imageResult} isloading={this.state.isloading} />
                         </Tab>
 
                         {/* THIRD TAB HEADING */}
@@ -181,7 +179,7 @@ class MyProfile extends Component {
                                 <Text style={this.state.page === 2 ? styles.activeTextStyle : styles.textStyle}>{this.state.totalMedia > 1 ? 'Total clips' : 'Total clip'}</Text>
                             </View>
                         </TabHeading>}>
-                            <TabThree/>
+                            <TabThree totalPost={this.state.totalPost} isloading={this.state.isloading} />
                         </Tab>
 
                         {/* END OF TABS */}
@@ -255,7 +253,9 @@ const mapStateToProps = state => {
     return {
         isLoading: state.ui.isLoading,
         isConnected: state.isConnected.isConnected,
-        data: state.editProfileReducer.editData
+        data: state.editProfileReducer.editData,
+        token: state.authReducer.token,
+        userId: state.authReducer.userId
     }
 }
 

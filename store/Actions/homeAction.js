@@ -6,7 +6,7 @@ import { NavigationActions } from 'react-navigation';
 
 
 export const fetchHomeRequest = () => (dispatch, getState) => {
-    const { userId, token} = getState().AuthReducer;
+    const { userId, token} = getState().authReducer;
     const {isConnected} = getState().isConnected
 
     
@@ -41,7 +41,7 @@ export const fetchHomeRequest = () => (dispatch, getState) => {
             else {
                 dispatch(
                     setAsync(
-                        resData.data,
+                        resData
                     )
                 );
             }
@@ -67,7 +67,7 @@ export const setAsync = (data) => {
 }
 
 export const fetchProfile = () => (dispatch, getState) => {
-    const {userId, token} = getState().AuthReducer;
+    const {userId, token} = getState().authReducer;
     const url = REQUEST_URL + HOME_URL + userId;
 
     if(token){
@@ -107,7 +107,7 @@ export const profileAsync = (profile, pic) => {
 }
 
 export const fetchMyProfile = (item) => (dispatch, getState) => {
-    const {token} = getState().AuthReducer;
+    const {token} = getState().authReducer;
     const url = REQUEST_URL + HOME_URL + item;
     if(token){
         fetch(url, {
@@ -122,7 +122,8 @@ export const fetchMyProfile = (item) => (dispatch, getState) => {
             dispatch(
                 userAsync(
                     resData.data,
-                    resData.data.phone
+                    resData.data.phone,
+                    item
                 )
             )
             dispatch(NavigationActions.navigate({ routeName: 'ViewProfile' }))
@@ -138,16 +139,17 @@ export const fetchMyProfile = (item) => (dispatch, getState) => {
     }
 }
 
-export const userAsync = (item, phone) => {
+export const userAsync = (item, phone, userId) => {
     return {
         type: MY_PROFILE,
         user: item,
-        phone: phone
+        phone: phone,
+        viewUserId: userId
     }
 }
 
 export const fetchPostDetails = (user) => (dispatch, getState) => {
-    const {token} = getState().AuthReducer;
+    const {token} = getState().authReducer;
     const url = REQUEST_URL + HOME_URL + user + HOME_POST;
     if(token){
         fetch(url, {

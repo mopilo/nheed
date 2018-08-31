@@ -75,8 +75,10 @@ export const loginUser = (userDetails) => (dispatch, getState) => {
 export const setAsync = (token, userId) => dispatch=>{
     //dispatch to store
     dispatch(authSetTokenUserId(token, userId));
-    AsyncStorage.setItem('token', token);
-    AsyncStorage.setItem('id', userId)
+    return AsyncStorage.multiSet([
+        ['token', token], 
+        ['userId', userId]
+    ]);
 }
 
 export const authSetTokenUserId= (token, userId)=>{
@@ -263,7 +265,7 @@ export const registerOTP = (userDetails) => (dispatch, getState) => {
 
 
 export const authAutoSignIn = () => (dispatch, getState)=>{
-    const {token} = getState().AuthReducer
+    const {token} = getState().authReducer
     if(token){
         dispatch(NavigationActions.navigate({ routeName: 'Home' }))
     }

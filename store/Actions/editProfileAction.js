@@ -9,8 +9,8 @@ import ImagePicker from 'react-native-image-picker'
 
 
 export const fetchEditProfile = () => (dispatch, getState) => {
-    const {token} = getState().AuthReducer;
-    const {userId} = getState().AuthReducer
+    const {token} = getState().authReducer;
+    const {userId} = getState().authReducer
     const {isConnected} = getState().isConnected
 
     const url = REQUEST_URL + HOME_URL + userId;
@@ -69,8 +69,8 @@ export const editAsync = (item) => {
 
 export const fetchNewProfile = (newData) => (dispatch, getState) => {
     const {isConnected} = getState().isConnected
-    const {token} = getState().AuthReducer;
-    const {userId} = getState().AuthReducer
+    const {token} = getState().authReducer;
+    const {userId} = getState().authReducer
     
     const url = REQUEST_URL + HOME_URL + userId;
 
@@ -133,8 +133,8 @@ export const fetchNewProfile = (newData) => (dispatch, getState) => {
 
 export const addNewDp = () => (dispatch, getState) => {
     const {isConnected} = getState().isConnected
-    const {token} = getState().AuthReducer;
-    const {userId} = getState().AuthReducer
+    const {token} = getState().authReducer;
+    const {userId} = getState().authReducer
 
     const options = {
         title: 'Select Image',

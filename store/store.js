@@ -19,7 +19,6 @@ import editProfileReducer from './reducers/editProfileReducer'
 import {combineReducers} from 'redux'
 import reducer from './reducers'
 import logger from 'redux-logger'
-import promise from 'redux-promise-middleware'
 
 
 const initialState = {};
@@ -48,5 +47,5 @@ if (__DEV__) {
     composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
   }
 
-export const store = createStore(rootReducer, initialState, compose(applyMiddleware(promise(), logger, thunk, navigationMiddleware)));
+export const store = createStore(reducer, initialState, compose(applyMiddleware(thunk, navigationMiddleware)));
 export const persistor = persistStore(store)
