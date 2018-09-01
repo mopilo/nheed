@@ -20,7 +20,12 @@ import Explore from '../../src/tabs/Explore'
 //other screens
 import GridPage from '../../src/screen/GridPage'
 import Search from '../../src/screen/Search'
+import ListPost from '../../src/screen/ListPost'
+
+//media
 import ImagePost from '../../src/screen/cameraPost/ImagePost'
+import VideoPost from '../../src/screen/cameraPost/VideoPost'
+
 
 //profile
 import EditProfile from '../../src/profile/EditProfile'
@@ -33,6 +38,47 @@ import MIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 
 
+ //media
+ const ImageTabNav = createStackNavigator({
+  ImagePost: {screen: ImagePost,
+    navigationOptions: {
+      tabBarVisible: false
+    }}
+})
+
+const VideoTabNav = createStackNavigator({
+  VideoPost: {screen: VideoPost,
+    navigationOptions: {
+      tabBarVisible: false
+    }}
+})
+
+// tab for media
+const MediaTab = createBottomTabNavigator({
+  Image: {screen: ImageTabNav},
+  Video: {screen: VideoTabNav}
+},{
+  swipeEnabled: false,
+      tabBarOptions: {
+          inactiveTintColor: 'grey',
+          activeTintColor: '#000000',
+          showIcon: false,
+          showLabel: true,
+          scrollEnabled: false,
+          animationEnabled: true,
+          renderIndicator: () => null,
+          labelStyle: {
+            fontFamily: 'Lato-Regular',
+            fontSize: 12,
+          },
+          style: {
+            backgroundColor: '#fff',
+          },
+        },
+})
+
+
+
 //stack for home
   const HomeTabNav = createStackNavigator({
     Home: {screen: Home},
@@ -40,22 +86,24 @@ import MIcon from 'react-native-vector-icons/MaterialCommunityIcons'
     GridPage: {screen: GridPage},
     ViewProfile: {screen: ViewProfile},
     MyProfile: {screen: MyProfile}, 
-    Search: {screen: Search}
+    Search: {screen: Search},
+    ListPost: {screen: ListPost}
   },{
     initialRouteName: 'Home',
   })
 
   const UploadTabNav = createStackNavigator({
     Upload: {screen: Upload},
-    ImagePost: {screen: ImagePost}
+    ImagePost: {screen: MediaTab}
   })
   const ExploreTabNav = createStackNavigator({
     Explore: {screen: Explore},
     Search: {screen: Search},
-    MyProfile: {screen: MyProfile} 
-
+    MyProfile: {screen: MyProfile},
+    ListPost: {screen: ListPost}
   })
 
+ 
   const AppTab = createBottomTabNavigator({
     HomeTab: {
       screen: HomeTabNav
@@ -123,11 +171,6 @@ import MIcon from 'react-native-vector-icons/MaterialCommunityIcons'
     SignUp: {screen:SignUp},
     OTP: {screen:OTP},
     AppTab: {screen: AppTab}
-    // Home: {screen: Home},
-    // EditProfile: { screen: EditProfile },
-    // GridPage: {screen: GridPage},
-    // ViewProfile: {screen: ViewProfile},
-    // MyProfile: {screen: MyProfile}
     },
   );
 

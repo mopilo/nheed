@@ -58,7 +58,7 @@ class Home extends PureComponent {
         }
     }
 
-    userProfile =  (item) => {
+    userProfile = (item) => {
         this.props.viewProfile(item)
     }
 

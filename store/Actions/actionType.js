@@ -19,4 +19,6 @@ export const FETCH_EDIT_PROFILE = 'FETCH_EDIT_PROFILE'
 export const ADD_PHOTO = 'ADD_PHOTO'
 export const EXPLORED = 'EXPLORED'
 
+export const LIST_POST = 'LIST_POST'
+
 export{login, register, otp};

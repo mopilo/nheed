@@ -1,7 +1,8 @@
-import {EXPLORED} from '../Actions/actionType'
+import {EXPLORED, LIST_POST} from '../Actions/actionType'
 
 const initialState = {
-    exploreData: []
+    exploreData: [],
+    listData: {}
 }
 
 export default function(state=initialState, action){
@@ -10,7 +11,12 @@ export default function(state=initialState, action){
             return {
                 ...state,
                 exploreData: action.explore
-            }
+            };
+        case LIST_POST:
+            return {
+                ...state,
+                listData: action.list
+            };
         default:
             return state
     }

@@ -18,7 +18,7 @@ import Video from 'react-native-video';
 import { CachedImage } from 'react-native-cached-image';
 import { connect } from 'react-redux';
 import {isConnected} from '../../store/Actions/isConnected'
-import {fetchExplore} from '../../store/Actions/index'
+import {fetchExplore, fetchListPost} from '../../store/Actions/index'
 
 const { width } = Dimensions.get('window')
 const numColumns = 3;
@@ -121,6 +121,7 @@ class Explore extends Component {
     }
 
     listPost = (item) => {
+        this.props.tabPost(item.id)
         // this.props.navigation.navigate('ListPost', {index: item.id, profilePic: this.state.res.profile_picture})
     }
     onRefresh = () => {
@@ -183,7 +184,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         explorePage: () => dispatch(fetchExplore()),
-        network: (status) => dispatch(isConnected(status))
+        network: (status) => dispatch(isConnected(status)),
+        tabPost: (item) => dispatch(fetchListPost(item))
     }
 }
 

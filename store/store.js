@@ -47,5 +47,5 @@ if (__DEV__) {
     composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
   }
 
-export const store = createStore(reducer, initialState, compose(applyMiddleware(thunk, navigationMiddleware)));
+export const store = createStore(reducer, initialState, compose(applyMiddleware(thunk, logger, navigationMiddleware)));
 export const persistor = persistStore(store)
