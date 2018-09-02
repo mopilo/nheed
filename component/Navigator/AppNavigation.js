@@ -21,6 +21,7 @@ import Explore from '../../src/tabs/Explore'
 import GridPage from '../../src/screen/GridPage'
 import Search from '../../src/screen/Search'
 import ListPost from '../../src/screen/ListPost'
+import Comment from '../../src/profile/Comment'
 
 //media
 import ImagePost from '../../src/screen/cameraPost/ImagePost'
@@ -100,7 +101,8 @@ const MediaTab = createBottomTabNavigator({
     Explore: {screen: Explore},
     Search: {screen: Search},
     MyProfile: {screen: MyProfile},
-    ListPost: {screen: ListPost}
+    ListPost: {screen: ListPost},
+    Comment: {screen: Comment}
   })
 
  
