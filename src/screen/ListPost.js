@@ -68,195 +68,158 @@ class ListPost extends Component {
         NetInfo.isConnected.removeEventListener('connectionChange', this._handleConnectionChange);
     }
 
-
-
     // for network check
     _handleConnectionChange = (isConnected) => {
         this.props.network({status: isConnected})
     };
 
-
-//    fetchData = () => {
-//         const token = this.props.token;
-//         const userId = this.props.userId;
-//         const url = REQUEST_URL + HOME_URL + userId + EXPLORE;
-//         let play;
-//         let exa;
-//         let index = this.props.navigation.state.params.index;
-
-//         if (token) {
-//             fetch(url, {
-//                 headers: {
-//                     'content-type': 'application/json',
-//                     'Accept': 'application/json',
-//                     'Authorization': `Bearer ${token}`
-//                 }
-//             })
-//                 .then(res => { return res.json() })
-//                 .then((resData) => {
-//                     if (resData.message) {
-//                         ToastAndroid.showWithGravity(
-//                             resData.message,
-//                             ToastAndroid.SHORT,
-//                             ToastAndroid.CENTER
-//                         );
-//                     }
-//                     else {
-//                         play = resData.data;
-//                         exa = play.find((e) => {return e.id === index});
-//                         this.setState({
-//                             token: token,
-//                             userId: userId,
-//                             data: exa
-//                         })
-//                     }
-//                     return resData;
-//                 }).catch((error) => {
-//                     console.log(error)
-//                 }).done
-//         }
-
-//     }
-
     // opens comment screen
     comment = (photoId) => {
-        // if(!this.state.disabled){
-        //     this.props.navigation.navigate('Comments', { userId: this.state.userId, token: this.state.token, post: photoId, profile_picture: this.state.profile_picture })
-        //     this.setState({disabled: true});
-        //     setTimeout(()=>{
-        //         this.setState({
-        //          disabled: false,
-        //        });
-        //      }, 5000)
-        // }
+        if(!this.state.disabled){
+            this.props.navigation.navigate('Comment', { post: photoId})
+            this.setState({disabled: true});
+            setTimeout(()=>{
+                this.setState({
+                 disabled: false,
+               });
+            }, 5000)
+        }
     }
 
     // posting comment from a post
     submitComment = (photoId) => {
-        // const url = REQUEST_URL + HOME_URL + this.state.userId + '/' + photoId + '/comments/'
-        // if (this.state.text === '') {
+        const token = this.props.token;
+        const userId = this.props.userId
+
+        const url = REQUEST_URL + HOME_URL + userId + '/' + photoId + '/comments/'
+        if (this.state.text === '') {
             
-        //     ToastAndroid.showWithGravity(
-        //         "Field can't be empty",
-        //         ToastAndroid.SHORT,
-        //         ToastAndroid.CENTER
-        //     );
-        // } 
-        // else{
-        //     fetch(url,{
-        //         method: "POST",
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             'Accept': 'application/json',
-        //             'Authorization': `Bearer ${this.state.token}`
-        //         },
-        //         body: JSON.stringify({
-        //             comment: {
-        //                 post_id: photoId,
-        //                 account_id: this.state.userId,
-        //                 comment: this.state.text
-        //             }
-        //         })
-        //     })
-        //     .then((res)=> {return res.json()})
-        //     .then((response)=> {
-        //         // let  {textInputs}  = this.state;
-        //         // textInputs[photoId] = '';
-        //         this.setState({
-        //             text: ''
-        //         });
-        //         console.log('commenting', response.data)
-        //         this.reRender()
-        //         return response;
-        //     })
-        // }
+            ToastAndroid.showWithGravity(
+                "Field can't be empty",
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+            );
+        } 
+        else{
+            fetch(url,{
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    comment: {
+                        post_id: photoId,
+                        account_id: userId,
+                        comment: this.state.text
+                    }
+                })
+            })
+            .then((res)=> {return res.json()})
+            .then((response)=> {
+                // let  {textInputs}  = this.state;
+                // textInputs[photoId] = '';
+                this.setState({
+                    text: ''
+                });
+                console.log('commenting', response.data)
+                // this.reRender()
+                return response;
+            })
+        }
     }
 
     //re-renders to show like
     reRender = (photoId) => {
-        // const url = REQUEST_URL + HOME_URL + this.state.userId + HOME_URL_LAST;
-        // fetch(url, {
-        //     headers: {
-        //         'content-type': 'application/json',
-        //         'Accept': 'application/json',
-        //         'Authorization': `Bearer ${this.state.token}`
-        //     }
-        // })
-        //     .then(res => { return res.json() })
-        //     .then((resData) => {
-        //         if (resData.message) {
-        //             ToastAndroid.showWithGravity(
-        //                 resData.message,
-        //                 ToastAndroid.SHORT,
-        //                 ToastAndroid.CENTER
-        //             );
-        //         }
-        //         else {
-        //             // let text = resData.data
-        //             // let photoLiked = text.filter((item) => { return item.id == photoId})
-        //             // photoLiked.forEach(word => { this.setState({likes: word.liked})})
+        const token = this.props.token
+        const userId = this.props.userId
+        const url = REQUEST_URL + HOME_URL + userId + EXPLORE;
+        fetch(url, {
+            headers: {
+                'content-type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(res => { return res.json() })
+            .then((resData) => {
+                if (resData.message) {
+                    ToastAndroid.showWithGravity(
+                        resData.message,
+                        ToastAndroid.SHORT,
+                        ToastAndroid.CENTER
+                    );
+                }
+                else {
+                    // let text = resData.data
+                    // let photoLiked = text.filter((item) => { return item.id == photoId})
+                    // photoLiked.forEach(word => { this.setState({likes: word.liked})})
 
-        //             // let photoCount = text.filter((item)=> {return item.id == photoId})
-        //             // photoCount.forEach(count => {this.setState({})})
-        //             let play = resData.data;
-        //             let index = this.props.navigation.state.params.index;
-        //             let exa = play.find((e) => {return e.id === index});
-        //             this.setState({
-        //                 data: exa,
-        //                 // time: resData.
-        //             })
+                    // let photoCount = text.filter((item)=> {return item.id == photoId})
+                    // photoCount.forEach(count => {this.setState({})})
+                    let play = resData.data;
+                    let index = this.props.navigation.state.params.index;
+                    let exa = play.find((e) => {return e.id === photoId});
+                    this.setState({
+                        data: exa,
+                        // time: resData.
+                    })
 
-        //         }
+                }
 
-        //         return resData;
-        //     }).catch((error) => {
-        //         console.log(error)
-        //     })
+                return resData;
+            }).catch((error) => {
+                console.log(error)
+            })
     }
 
     unlikePhoto = (photoId) => {
-        // const url = likeUrl + this.state.userId + '/unlike/' + photoId;
-
-        // fetch(url, {
-        //     headers: {
-        //         'content-type': 'application/json',
-        //         'Accept': 'application/json',
-        //         'Authorization': `Bearer ${this.state.token}`
-        //     }
-        // })
-        //     .then(res => res.json())
-        //     .then(resp => {
-        //         this.setState({
-        //             liked: resp
-        //         })
-        //         this.reRender(photoId)
-        //         return resp
-        //     })
-        //     .catch((err) => {
-        //         console.log(err)
-        //     })
+        const token = this.props.token
+        const userId = this.props.userId
+        const url = likeUrl + userId + '/unlike/' + photoId;
+        fetch(url, {
+            headers: {
+                'content-type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(res => res.json())
+            .then(resp => {
+                this.setState({
+                    liked: resp
+                })
+                this.reRender(photoId)
+                return resp
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 
     likePhoto = (photoId) => {
-        // const url = likeUrl + this.state.userId + '/like/' + photoId;
-        // fetch(url, {
-        //     headers: {
-        //         'content-type': 'application/json',
-        //         'Accept': 'application/json',
-        //         'Authorization': `Bearer ${this.state.token}`
-        //     }
-        // })
-        //     .then(res => res.json())
-        //     .then(resp => {
-        //         this.setState({
-        //             liked: resp
-        //         })
-        //         this.reRender(photoId)
-        //         return resp
-        //     })
-        //     .catch((err) => {
-        //         console.log(err)
-        //     })
+        const token = this.props.token
+        const userId = this.props.userId
+        const url = likeUrl + userId + '/like/' + photoId;
+        fetch(url, {
+            headers: {
+                'content-type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(res => res.json())
+            .then(resp => {
+                this.setState({
+                    liked: resp
+                })
+                this.reRender(photoId)
+                return resp
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 
 
@@ -331,37 +294,37 @@ class ListPost extends Component {
                             <CachedImage source={{ uri: item.url }} 
                             resizeMode="cover" resizeMethod='auto'
                             style={{ width: null, height: 350, flex: 1 }} 
-                        />  
+                            />  
                             :
                             <Video source={{uri: item.url}} style={{ width: null, height: 350, flex: 1 }} />
                         }
                         
                     </TouchableWithoutFeedback>
-                        <View style={{flex: 1, flexDirection: 'row', marginBottom: 0, position: 'absolute', bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.3, justifyContent: 'flex-end', width: width}}>
+                        <View style={{flex: 1, flexDirection: 'row', marginBottom: 0, position: 'absolute', bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.7)', opacity: 0.3, justifyContent: 'flex-end', width: width}}>
                             <View style={{flexDirection: 'row', margin: 2, padding: 5, alignItems: 'center', justifyContent: 'center', alignContent: 'center'}}>
                                 {   item.liked === true ?
                                     <View style={{ padding: 3}}>
                                         <TouchableNativeFeedback onPress={() => this.unlikePhoto(item.id)}>
-                                            <MIcon name='heart' size={16} color='#000' />
+                                            <MIcon name='heart' size={20} color='#fff' />
                                         </TouchableNativeFeedback>
                                     </View>
                                     :
                                     <View style={{ padding: 3}}>
                                         <TouchableNativeFeedback onPress={() => this.likePhoto(item.id)}>
-                                            <MIcon name='heart-outline' size={16} color='#000' />
+                                            <MIcon name='heart-outline' size={20} color='#fff' />
                                         </TouchableNativeFeedback>
                                     </View>
                                 }
-                                <Text style={{ fontSize: 12, color: '#000', padding: 5, fontFamily: 'Lato-Regular', margin: 0 }}>{item.like_count}</Text>
+                                <Text style={{ fontSize: 12, color: '#fff', padding: 5, fontFamily: 'Lato-Regular', margin: 0 }}>{item.like_count}</Text>
 
                             </View>
                             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', alignContent: 'center', marginRight: 4}}>
                                 <View style={{ padding: 3}}>
                                     <TouchableNativeFeedback transparent style={{  }} onPress={() => this.comment(item.id)}>
-                                        <Icon name='message-circle' size={16} color='#000' />
+                                        <Icon name='message-circle' size={20} color='#fff' />
                                     </TouchableNativeFeedback>
                                 </View>
-                                <Text style={{ fontSize: 12, color: '#000', padding: 5, fontFamily: 'Lato-Regular', margin: 0 }}>{item.comment_count}</Text>
+                                <Text style={{ fontSize: 12, color: '#fff', padding: 5, fontFamily: 'Lato-Regular', margin: 0 }}>{item.comment_count}</Text>
                             </View>
                         </View>   
                 </View>
@@ -409,9 +372,7 @@ class ListPost extends Component {
     render() {
         return (
             <ScrollView style={styles.container}>
-
                 {this.renderItem(this.props.data)}
-
             </ScrollView>
         );
     }
@@ -425,7 +386,7 @@ const styles = StyleSheet.create({
     },
     tabBar: {
         flex: 1,
-         height: 60,
+        height: 60,
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
