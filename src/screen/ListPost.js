@@ -28,6 +28,7 @@ import { REQUEST_URL, HOME_URL, HOME_URL_LAST, EXPLORE} from '../../component/Ut
 
 
 const {width} = Dimensions.get('window');
+const likeUrl = REQUEST_URL + HOME_URL;
 
 class ListPost extends Component {
 

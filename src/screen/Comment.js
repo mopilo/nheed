@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity,
     ScrollView, TextInput, RefreshControl, Image, FlatList, ToastAndroid} from 'react-native';
-import { REQUEST_URL, HOME_URL } from '../Utility/local';
+import { REQUEST_URL, HOME_URL } from '../../component/Utility/local';
 import {Thumbnail} from 'native-base'
+import {connect} from 'react-redux'
 
 
-class Comments extends Component{
+class Comment extends Component{
 
     state = {
         text: '',
@@ -15,7 +16,6 @@ class Comments extends Component{
 
     componentDidMount(){
         this.fetchComments()
-        const profilePic = this.props.navigation.state.params.profilePic;
     }
 
     onRefresh = () => this.fetchComments();
@@ -50,8 +50,8 @@ class Comments extends Component{
 
     // POST COMMENTS 
     postComment = () => {
-        let token = this.props.navigation.state.params.token;
-        let userId = this.props.navigation.state.params.userId;
+        let token = this.props.token;
+        let userId = this.props.userId;
         let photoID = this.props.navigation.state.params.post;
 
         const url = REQUEST_URL + HOME_URL + userId + '/' + photoID + '/comments/'
@@ -112,7 +112,6 @@ class Comments extends Component{
     }
 
     render(){
-        const profilePic = this.props.navigation.state.params.profile_picture;
         const caption = this.props.navigation.state.params.caption
         return(
             <View style={styles.container}>
@@ -131,7 +130,7 @@ class Comments extends Component{
                     {
                         caption ?
                         <View style={{flexDirection: 'row', borderBottomColor: 'grey', borderBottomWidth: 0.5, marginBottom: 5}}>
-                            <Thumbnail square source={{uri: profilePic}} style={{ height: 30, width: 30, borderRadius: 5 }}/>
+                            <Thumbnail square source={{uri: this.props.pic}} style={{ height: 30, width: 30, borderRadius: 5 }}/>
                             <Text style={{fontSize: 14, fontFamily: 'Lato-Regular', margin: 10, alignSelf: 'flex-start' }}>
                                 {caption}
                             </Text>
@@ -148,15 +147,15 @@ class Comments extends Component{
                 <View style={styles.tabBar}>
                     <View style={{flex: 1}}>
                         <View style={{width: 35, height: 35, justifyContent: 'center', alignItems: 'center'}}>
-                            <Thumbnail square source={{uri: profilePic}} style={{ height: 30, width: 30, borderRadius: 5 }}/>
+                            <Thumbnail square source={{uri: this.props.pic}} style={{ height: 30, width: 30, borderRadius: 5 }}/>
                         </View>
                     </View>
                     <View style={{flex: 6}}>
                         <TextInput
                             placeholder= 'Add a comment...'
-                            placeholderTextColor='#f2f2f2'
+                            placeholderTextColor='#000'
                             underlineColorAndroid = 'transparent'
-                            style={{fontFamily: 'Lato-Regular', fontSize: 14, color: '#f2f2f2'}}
+                            style={{fontFamily: 'Lato-Regular', fontSize: 14, color: '#000'}}
                             onChangeText={(text) => this.setState({text})}
                             value={this.state.text}
                             maxLength={150}
@@ -167,7 +166,7 @@ class Comments extends Component{
 
                     <View style={{flex: 1}}>
                         <TouchableOpacity onPress={this.postComment} >
-                            <Text style={{color: '#f2f2f2', fontFamily: 'Lato-Regular', fontSize: 16, margin: 5}}>Post</Text>
+                            <Text style={{color: '#000', fontFamily: 'Lato-Regular', fontSize: 16, margin: 5}}>Post</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -184,7 +183,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     tabBar: {
-        backgroundColor: '#251b33',
+        backgroundColor: '#fff',
         height: 60,
         borderTopWidth: 0.5,
         borderColor: '#E5E5E5',

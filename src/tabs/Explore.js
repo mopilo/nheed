@@ -30,7 +30,7 @@ class Explore extends Component {
         return{
             headerRight: (
                 <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                    <Icon name= 'search' size={23} color='#000000' style={{margin: 10}} onPress={()=>{navigation.navigate('Search')}}/>
+                    <Icon name= 'search' size={23} color='#000000' style={{margin: 6}} onPress={()=>{navigation.navigate('Search')}}/>
                     <MIcon name='dots-vertical' size={23} color='black' onPress={()=> alert('Notification')} style={{margin: 4}}/>
                     <TouchableOpacity onPress={() => { navigation.navigate('MyProfile') }}>
                         <CachedImage

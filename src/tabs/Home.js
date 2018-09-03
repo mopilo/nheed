@@ -90,7 +90,7 @@ class Home extends PureComponent {
 
                     <View style={{flex: 0.5, alignItems: 'center', justifyContent: 'center', margin: 4}}>
                             <TouchableNativeFeedback onPress={()=> this.DetailPage(item.account_id)}>
-                                <View style={{borderRadius: 50, height: 40, width: 40, borderColor: '#000', borderWidth: 1, alignItems: 'center', justifyContent: 'center', marginRight: 8}}>
+                                <View style={{borderRadius: 50, height: 40, width: 40, borderColor: '#000', borderWidth: 0.7, alignItems: 'center', justifyContent: 'center', marginRight: 8}}>
                                     <Text style={{fontFamily: 'Lato-Regular', fontSize: 14, alignSelf: 'center'}}>{item.post_count}</Text>
                                 </View>
                             </TouchableNativeFeedback>

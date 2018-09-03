@@ -1,10 +1,9 @@
 import React, {Component} from 'react'
-import {View, Text, TouchableOpacity} from 'react-native'
+import {View, Text, TouchableOpacity, Dimensions} from 'react-native'
 import Icon from 'react-native-vector-icons/Feather';
 import CameraRollPicker from 'react-native-camera-roll-picker';
 import ImagePicker from 'react-native-image-crop-picker';
-
-
+const {width} = Dimensions.get('window')
 
 class Upload extends Component{
 

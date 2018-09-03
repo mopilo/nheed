@@ -21,11 +21,14 @@ import Explore from '../../src/tabs/Explore'
 import GridPage from '../../src/screen/GridPage'
 import Search from '../../src/screen/Search'
 import ListPost from '../../src/screen/ListPost'
-import Comment from '../../src/profile/Comment'
+import Comment from '../../src/screen/Comment'
 
 //media
 import ImagePost from '../../src/screen/cameraPost/ImagePost'
 import VideoPost from '../../src/screen/cameraPost/VideoPost'
+import Post from '../../src/screen/cameraPost/Post'
+import PostVideo from '../../src/screen/cameraPost/PostVideo'
+
 
 
 //profile
@@ -95,7 +98,9 @@ const MediaTab = createBottomTabNavigator({
 
   const UploadTabNav = createStackNavigator({
     Upload: {screen: Upload},
-    ImagePost: {screen: MediaTab}
+    ImagePost: {screen: MediaTab},
+    Post: {screen: Post},
+    PostVideo: {screen: PostVideo}
   })
   const ExploreTabNav = createStackNavigator({
     Explore: {screen: Explore},
