@@ -22,7 +22,7 @@ import moment from 'moment';
 import { CachedImage } from 'react-native-cached-image';
 import {connect} from 'react-redux'
 import {isConnected} from '../../store/Actions/isConnected'
-import {fetchMyProfile} from '../../store/Actions/index'
+import {fetchMyProfile, fetchListPost} from '../../store/Actions/index'
 import Video from 'react-native-video'
 import { REQUEST_URL, HOME_URL, HOME_URL_LAST, EXPLORE} from '../../component/Utility/local';
 
@@ -132,53 +132,55 @@ class ListPost extends Component {
     }
 
     //re-renders to show like
-    reRender = (photoId) => {
-        const token = this.props.token
-        const userId = this.props.userId
-        const url = REQUEST_URL + HOME_URL + userId + EXPLORE;
-        fetch(url, {
-            headers: {
-                'content-type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then(res => { return res.json() })
-            .then((resData) => {
-                if (resData.message) {
-                    ToastAndroid.showWithGravity(
-                        resData.message,
-                        ToastAndroid.SHORT,
-                        ToastAndroid.CENTER
-                    );
-                }
-                else {
-                    // let text = resData.data
-                    // let photoLiked = text.filter((item) => { return item.id == photoId})
-                    // photoLiked.forEach(word => { this.setState({likes: word.liked})})
+    // reRender = (photoId) => {
+    //     const token = this.props.token
+    //     const userId = this.props.userId
+    //     const url = REQUEST_URL + HOME_URL + userId + EXPLORE;
+    //     console.log('rerender', url + photoId)
+    //     fetch(url, {
+    //         headers: {
+    //             'content-type': 'application/json',
+    //             'Accept': 'application/json',
+    //             'Authorization': `Bearer ${token}`
+    //         }
+    //     })
+    //         .then(res => { return res.json() })
+    //         .then((resData) => {
+    //             if (resData.message) {
+    //                 ToastAndroid.showWithGravity(
+    //                     resData.message,
+    //                     ToastAndroid.SHORT,
+    //                     ToastAndroid.CENTER
+    //                 );
+    //             }
+    //             else {
+    //                 // let text = resData.data
+    //                 // let photoLiked = text.filter((item) => { return item.id == photoId})
+    //                 // photoLiked.forEach(word => { this.setState({likes: word.liked})})
 
-                    // let photoCount = text.filter((item)=> {return item.id == photoId})
-                    // photoCount.forEach(count => {this.setState({})})
-                    let play = resData.data;
-                    let index = this.props.navigation.state.params.index;
-                    let exa = play.find((e) => {return e.id === photoId});
-                    this.setState({
-                        data: exa,
-                        // time: resData.
-                    })
+    //                 // let photoCount = text.filter((item)=> {return item.id == photoId})
+    //                 // photoCount.forEach(count => {this.setState({})})
+    //                 let play = resData.data;
+    //                 let index = this.props.navigation.state.params.index;
+    //                 let exa = play.find((e) => {return e.id === photoId});
+    //                 this.setState({
+    //                     data: exa,
+    //                     // time: resData.
+    //                 })
 
-                }
+    //             }
 
-                return resData;
-            }).catch((error) => {
-                console.log(error)
-            })
-    }
+    //             return resData;
+    //         }).catch((error) => {
+    //             console.log(error)
+    //         })
+    // }
 
     unlikePhoto = (photoId) => {
         const token = this.props.token
         const userId = this.props.userId
         const url = likeUrl + userId + '/unlike/' + photoId;
+        console.log('unliked', url)
         fetch(url, {
             headers: {
                 'content-type': 'application/json',
@@ -189,9 +191,9 @@ class ListPost extends Component {
             .then(res => res.json())
             .then(resp => {
                 this.setState({
-                    liked: resp
+                    liked: resp,
                 })
-                this.reRender(photoId)
+                this.props.tabPost(photoId)
                 return resp
             })
             .catch((err) => {
@@ -203,6 +205,7 @@ class ListPost extends Component {
         const token = this.props.token
         const userId = this.props.userId
         const url = likeUrl + userId + '/like/' + photoId;
+        console.log('liked', url)
         fetch(url, {
             headers: {
                 'content-type': 'application/json',
@@ -213,45 +216,14 @@ class ListPost extends Component {
             .then(res => res.json())
             .then(resp => {
                 this.setState({
-                    liked: resp
+                    liked: resp,
                 })
-                this.reRender(photoId)
+                this.props.tabPost(photoId)
                 return resp
             })
             .catch((err) => {
                 console.log(err)
             })
-    }
-
-
-    liked = (photoId) => {
-        // const url = likeUrl + this.state.userId + '/like/' + photoId;
-        // var doublePressed = new Date().getTime() - this.state.lastPress;
-
-        // if (doublePressed < 400) {
-        //     // double tap happend
-        //     fetch(url, {
-        //         headers: {
-        //             'content-type': 'application/json',
-        //             'Accept': 'application/json',
-        //             'Authorization': `Bearer ${this.state.token}`
-        //         }
-        //     })
-        //         .then(res => res.json())
-        //         .then(resp => {
-        //             this.setState({
-        //                 liked: resp
-        //             })
-        //             this.reRender(photoId)
-        //             return resp
-        //         })
-        //         .catch((err) => {
-        //             console.log(err)
-        //         })
-        // }
-        // this.setState({
-        //     lastPress: new Date().getTime()
-        // })
     }
 
     //opens the view profile
@@ -274,7 +246,7 @@ class ListPost extends Component {
                             <Thumbnail square source={{ uri: item.account.profile_picture }} style={{ height: 30, width: 30, borderRadius: 5 }} />
                        </TouchableOpacity>
                     </View>
-                    <View style={{flex: 4}}>
+                    <View style={{flex: 3.6}}>
                         <Text note style={{ fontSize: 12, fontFamily: 'Lato-Bold', color: '#000' }}>{item.account.name}</Text>
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center', justifyContent:'center', alignContent: 'center' , flex: 1}}>
@@ -289,7 +261,7 @@ class ListPost extends Component {
                     </View>
                 </View>
                 <View style={{marginTop: 4, marginBottom: -5}}>
-                    <TouchableWithoutFeedback onPress={() => this.liked(item.id)}>
+                    {/* <TouchableWithoutFeedback onPress={() => this.liked(item.id)}> */}
                         {
                             item.post_type === 'image' ? 
                             <CachedImage source={{ uri: item.url }} 
@@ -299,8 +271,7 @@ class ListPost extends Component {
                             :
                             <Video source={{uri: item.url}} style={{ width: null, height: 350, flex: 1 }} />
                         }
-                        
-                    </TouchableWithoutFeedback>
+                    {/* </TouchableWithoutFeedback> */}
                         <View style={{flex: 1, flexDirection: 'row', marginBottom: 0, position: 'absolute', bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.7)', opacity: 0.3, justifyContent: 'flex-end', width: width}}>
                             <View style={{flexDirection: 'row', margin: 2, padding: 5, alignItems: 'center', justifyContent: 'center', alignContent: 'center'}}>
                                 {   item.liked === true ?
@@ -415,6 +386,7 @@ const mapDispatchToProps = dispatch => {
     return {
         network: (status) => dispatch(isConnected(status)),
         viewProfile: (item) =>  dispatch(fetchMyProfile(item)),
+        tabPost: (item) => dispatch(fetchListPost(item))
     }
 }
 

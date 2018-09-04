@@ -3,12 +3,9 @@ import {
     StyleSheet,
     View,
     FlatList,
-    Image,
     ActivityIndicator,
-    AsyncStorage,
     NetInfo,
     TouchableOpacity,
-    PermissionsAndroid,
     Dimensions,
     RefreshControl
 } from 'react-native';
@@ -42,7 +39,6 @@ class Explore extends Component {
             )
         }
     };
-
 
     // async requestStoragePermission() {
     //     const chckStoragePermission = PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
@@ -94,12 +90,10 @@ class Explore extends Component {
         NetInfo.isConnected.removeEventListener('connectionChange', this._handleConnectionChange);
     }
 
-
     // for network check
     _handleConnectionChange = (isConnected) => {
         this.props.network({status: isConnected})
     };
-
 
     // this methods holds both images and videos
     renderElement = (item) => {

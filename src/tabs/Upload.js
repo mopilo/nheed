@@ -31,7 +31,7 @@ class Upload extends Component{
                                  path: result,
                                  width: width,
                                  height: width,
-                                 compressImageQuality: 1
+                                 compressImageQuality: 0
                              }).then(image => {
                                  this.setState({
                                      image: image.path,

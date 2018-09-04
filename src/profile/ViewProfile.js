@@ -3,20 +3,16 @@ import {
     StyleSheet,
     Text,
     View,
-    Image,
     TouchableOpacity,
     ScrollView,
-    AsyncStorage,
     Linking,
     NetInfo,
-    ActivityIndicator,
     PermissionsAndroid
 } from 'react-native';
 import {connect} from 'react-redux'
 import {isConnected} from '../../store/Actions/isConnected'
 import Icon from 'react-native-vector-icons/Feather';
-import { TabNavigator } from 'react-navigation';
-import { Card, CardItem, Thumbnail, Body, Left, Right, Button, Container, Tabs, Tab, TabHeading } from 'native-base';
+import { Container, Tabs, Tab, TabHeading } from 'native-base';
 import { REQUEST_URL, HOME_URL, MY_POST, HOME_POST } from '../../component/Utility/local';
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import TabThree from './profileTabs/TabThree';
@@ -119,48 +115,48 @@ class ViewProfile extends Component {
 
     
 
-    //function call to navigate to edit screen
-    // Nheed = () => {
-    //     const acctId = this.state.acctId
-    //     const userId = this.state.userId;
-    //     const token = this.state.token;
-    //     const follow = REQUEST_URL + HOME_URL + userId + "/follow/" + acctId;
-    //     const unfollow = REQUEST_URL + HOME_URL + userId + "/unfollow/" + acctId;
-    //     if (this.state.nheed === 'Nheed Me') {
-    //         fetch(follow, {
-    //             headers: {
-    //                 'content-type': 'application/json',
-    //                 'Accept': 'application/json',
-    //                 'Authorization': `Bearer ${token}`
-    //             }
-    //         })
-    //             .then((res) => { return res.json() })
-    //             .then((resData) => {
-    //                 this.setState({ nheed: 'Nheeded' })
-    //                 console.log(resData.data)
-    //                 return resData;
-    //             })
-    //             .catch((e)=>{console.log(e)})
-    //         //increase the amount of followers
-    //     }
-    //     else{
-    //         fetch(unfollow, {
-    //             headers: {
-    //                 'content-type': 'application/json',
-    //                 'Accept': 'application/json',
-    //                 'Authorization': `Bearer ${token}`
-    //             }
-    //         })
-    //             .then((res) => { return res.json() })
-    //             .then((resData) => {
-    //                 this.setState({nheed: 'Nheed Me'})
-    //                 //reduce the amount of followers
-    //                 console.log(resData.data)
-    //                 return resData;
-    //             })
-    //             .catch((e)=>{console.log(e)})
-    //     }
-    // }
+    // function call to navigate to edit screen
+    Nheed = () => {
+        const token =this.props.token
+        const acctId = this.props.viewData.id
+        const userId = this.props.userId;
+        const follow = REQUEST_URL + HOME_URL + userId + "/follow/" + acctId;
+        const unfollow = REQUEST_URL + HOME_URL + userId + "/unfollow/" + acctId;
+        if (this.state.nheed === 'Nheed Me') {
+            fetch(follow, {
+                headers: {
+                    'content-type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then((res) => { return res.json() })
+                .then((resData) => {
+                    this.setState({ nheed: 'Nheeded' })
+                    console.log(resData.data)
+                    return resData;
+                })
+                .catch((e)=>{console.log(e)})
+            //increase the amount of followers
+        }
+        else{
+            fetch(unfollow, {
+                headers: {
+                    'content-type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then((res) => { return res.json() })
+                .then((resData) => {
+                    this.setState({nheed: 'Nheed Me'})
+                    //reduce the amount of followers
+                    console.log(resData.data)
+                    return resData;
+                })
+                .catch((e)=>{console.log(e)})
+        }
+    }
 
     onChangeTab() {
         
@@ -350,6 +346,7 @@ const mapStateToProps = state => {
         viewData: state.homeReducer.idData,
         phone: state.homeReducer.phone,
         token: state.authReducer.token,
+        userId: state.authReducer.userId
         // userId: state.homeReducer.viewUserId
     };
 };

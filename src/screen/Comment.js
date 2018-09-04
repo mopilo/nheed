@@ -12,6 +12,7 @@ class Comment extends Component{
         text: '',
         refreshing: true,
         comments: [],
+        post: []
     }
 
     componentDidMount(){
@@ -23,8 +24,8 @@ class Comment extends Component{
     // FETCH COMMENTS
 
     fetchComments = () => {
-        let token = this.props.navigation.state.params.token;
-        let userId = this.props.navigation.state.params.userId;
+        let token = this.props.token;
+        let userId = this.props.userId;
         let photoID = this.props.navigation.state.params.post;
         const url = REQUEST_URL + HOME_URL + userId + '/posts/' + photoID;
         // const url = REQUEST_URL + HOME_URL + userId + '/' + photoID + '/comments/'
@@ -40,7 +41,8 @@ class Comment extends Component{
         .then(response => {
             this.setState({
                 refreshing: false,
-                comments: response.comments
+                comments: response.comments,
+                post: response.post
             })
             console.log(this.state.comments)
             return response
@@ -112,7 +114,6 @@ class Comment extends Component{
     }
 
     render(){
-        const caption = this.props.navigation.state.params.caption
         return(
             <View style={styles.container}>
                 <View style={styles.body}>
@@ -128,11 +129,11 @@ class Comment extends Component{
 
                     >
                     {
-                        caption ?
+                        this.state.post.caption ?
                         <View style={{flexDirection: 'row', borderBottomColor: 'grey', borderBottomWidth: 0.5, marginBottom: 5}}>
                             <Thumbnail square source={{uri: this.props.pic}} style={{ height: 30, width: 30, borderRadius: 5 }}/>
                             <Text style={{fontSize: 14, fontFamily: 'Lato-Regular', margin: 10, alignSelf: 'flex-start' }}>
-                                {caption}
+                                {this.state.post.caption}
                             </Text>
                         </View> : null
                     }

@@ -6,7 +6,7 @@ import Geocoder from 'react-native-geocoding';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {connect} from 'react-redux'
 import { REQUEST_URL, HOME_URL, HOME_POST } from '../../../component/Utility/local';
-
+import * as Progress from 'react-native-progress';
 
 
 // AIzaSyD10yxqkK3FgbKBQgijjcFwxFcY4DsoHKE
@@ -21,7 +21,8 @@ class Post extends Component {
             longitude: null,
             place: 'Abuja',
             error: null,
-            text: ''
+            text: '',
+            progress: 0
         }
     }
 
@@ -76,7 +77,8 @@ class Post extends Component {
                 if (this.props.navigation.state.params.image) {
                         const token = this.props.token
                         const userId = this.props.userId
-
+                        let progress = 0;
+                        this.setState({progress})
                         const url = REQUEST_URL + HOME_URL + userId + HOME_POST
                         if (token) {
                             RNFetchBlob.fetch('POST', url, {
@@ -93,6 +95,13 @@ class Post extends Component {
                                 ])
                                 .uploadProgress((written, total) => {
                                     console.log('uploaded', written / total)
+                                    setInterval(()=> {
+                                        progress += written/total
+                                        if(progress > 1){
+                                            progress = 1
+                                        }
+                                        this.setState({progress})
+                                    }, 100)
                                 })
                                 .then((res) => { return res.json() })
                                 .then((resData) => {
@@ -142,7 +151,11 @@ class Post extends Component {
                     </View>
                 </KeyboardAvoidingView>
                 <View style={{ flex: 2 }}>
-
+                <Text>Progress Example</Text>
+                <Progress.Bar
+          style={{margin: 10}}
+          progress={this.state.progress}
+        />
                 </View>
 
             </View>
